@@ -1,0 +1,88 @@
+<loader-animation *ngIf="!isDataAvailable"></loader-animation>
+<div *ngIf="isDataAvailable">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header">
+        <div class="btn-toolbar pull-right">
+          <a href class="btn btn-warning" [routerLink]="['/user','user']"><b>İptal</b></a>
+          <button class="btn btn-success" form="editUserForm" [disabled]="!editUserForm.valid || isSaving"><b>Kaydet</b></button>
+        </div>
+        <h1>Kullanıcı Yönetimi
+          <small>Kullanıcı bilgilerini güncelleyin</small>
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <form role="form" id="editUserForm" [formGroup]="editUserForm" (submit)="save()">
+    <div class="row">
+      <div class="col-md-6">
+        <fieldset>
+          <legend>Giriş Bilgileri</legend>
+          <div class="form-group">
+            <label for="username">Kullanıcı Adı</label>
+            <input type="text" class="form-control" id="username" formControlName="username" placeholder="Kullanıcı Adı">
+            <control-messages [control]="editUserForm.controls.email"></control-messages>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Adresi</label>
+            <input type="text" class="form-control" id="email" formControlName="email" placeholder="Email Adresi">
+            <control-messages [control]="editUserForm.controls.email"></control-messages>
+          </div>
+          <div class="form-group">
+            <label for="password">Şifre</label>
+            <input type="password" class="form-control" id="password" [formControl]="editUserForm.controls['passwords']['controls']['password']" placeholder="Şifre">
+            <control-messages [control]="editUserForm.controls['passwords']['controls']['password']"></control-messages>
+          </div>
+          <div class="form-group">
+            <label for="re_password">Şifre (tekrar)</label>
+            <input type="password" class="form-control" id="re_password" [formControl]="editUserForm.controls['passwords']['controls']['re_password']" placeholder="Şifre (tekrar)">
+            <control-messages [control]="editUserForm.controls['passwords']['controls']['re_password']"></control-messages>
+            <control-messages [control]="editUserForm.controls['passwords']"></control-messages>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Durum Bilgisi</legend>
+          <div class="form-group">
+            <label for="sel1">Durum</label>
+            <select class="form-control" formControlName="account_non_locked" #t (change)="defaultStatusSelector(t.value)">
+              <option value="false">KİLİTLİ</option>
+              <option value="true">AÇIK</option>
+            </select>
+          </div>
+          <div class="alert alert-danger" *ngIf="user.loginAttempt" role="alert">
+            <p>Bu hesap yanlış giriş deneme sayısını aştığı için kilitlenmiştir.
+            <br/>Son deneme tarihi <b>{{user.loginAttempt.lastAttemptDate | date:'dd-MM-yyyy hh:mm:ss a'}}</b>.
+          </div>
+        </fieldset>
+      </div>
+      <div class="col-md-6">
+        <fieldset>
+          <legend>Yetki Grupları</legend>
+          <div class="checkbox" *ngFor="let group of groupList;">
+            <label>
+              <input type="checkbox" [formControl]="editUserForm.controls['groups']['controls'][group.id]"  (change)="updateCheckedOptions(group, $event)" [checked]="group.isChecked" value="{{group.id}}">
+              {{group.name}}
+            </label>
+          </div>
+          <control-messages [control]="editUserForm.controls['groups']"></control-messages>
+        </fieldset>
+
+        <fieldset>
+          <legend>Yetkiler</legend>
+          <div class="checkbox" *ngFor="let role of roleList;">
+            <label>
+              <input type="checkbox" [formControl]="editUserForm.controls['roles']['controls'][role.id]" (change)="updateCheckedOptions(role, $event)" [checked]="role.isChecked" value="{{role.id}}">
+              {{role.name}}
+              <br/>
+              <span class="text-muted" *ngFor="let privilege of role.privileges; let last=last">{{privilege.name}}{{last ? '' : ', '}}</span>
+            </label>
+          </div>
+          <control-messages [control]="editUserForm.controls['roles']"></control-messages>
+        </fieldset>
+      </div>
+    </div>
+  </form>
+  <simple-notifications [options]="notificationOptions"></simple-notifications>
+</div>

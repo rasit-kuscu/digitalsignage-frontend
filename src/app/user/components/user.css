@@ -1,0 +1,12 @@
+div.alert-warning {
+    position: relative;
+}
+
+div.alert-warning p.pull-left {
+   -webkit-transform: translateY(-50%);
+   -ms-transform: translateY(-50%);
+   -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    position: absolute;
+    top: 50%;
+}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["app/user/models/login.attempt.ts"],"names":[],"mappings":";;;;;;;YAAA;gBAAA;gBAIA,CAAC;gBAAD,mBAAC;YAAD,CAJA,AAIC,IAAA;YAJD,uCAIC,CAAA","file":"app/user/models/login.attempt.js","sourcesContent":["export class LoginAttempt {\n  public count: number;\n  public left: number;\n  public lastAttemptDate: any;\n}\n"],"sourceRoot":"/source/"}

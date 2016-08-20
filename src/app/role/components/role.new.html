@@ -1,0 +1,48 @@
+<loader-animation *ngIf="!isDataAvailable"></loader-animation>
+<div *ngIf="isDataAvailable">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header">
+        <div class="btn-toolbar pull-right">
+          <a href class="btn btn-warning" [routerLink]="['/management','role']"><b>Geri</b></a>
+          <button class="btn btn-success" form="newRoleForm" [disabled]="!newRoleForm.valid || isSaving"><b>Kaydet</b></button>
+        </div>
+        <h1>Yetki Yönetimi
+          <small>Yeni yetki oluşturun</small>
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <form role="form" id="newRoleForm" [formGroup]="newRoleForm" (submit)="save()">
+    <div class="row">
+      <div class="col-md-6">
+        <fieldset>
+          <legend>Yetki Bilgileri</legend>
+          <div class="form-group">
+            <label for="name">Yetki Adı</label>
+            <input type="text" class="form-control" id="name" formControlName="name" placeholder="Yetki Adı">
+            <control-messages [control]="newRoleForm.controls.name"></control-messages>
+          </div>
+        </fieldset>
+      </div>
+      <div class="col-md-6">
+        <fieldset>
+          <legend>Yetki Detayları</legend>
+          <ul class="list-unstyled">
+            <li class="col-md-3" *ngFor="let privilege of privilegeList;">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" [formControl]="newRoleForm.controls['privileges']['controls'][privilege.id]"  (change)="updateCheckedOptions(privilege, $event)" value="{{privilege.id}}">
+                  {{privilege.name}}
+                </label>
+              </div>
+            </li>
+          </ul>
+          <control-messages [control]="newRoleForm.controls['privileges']"></control-messages>
+        </fieldset>
+      </div>
+    </div>
+  </form>
+  <simple-notifications [options]="notificationOptions"></simple-notifications>
+</div>

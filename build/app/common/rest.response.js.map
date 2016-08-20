@@ -1,0 +1,1 @@
+{"version":3,"sources":["app/common/rest.response.ts"],"names":[],"mappings":";;;;;;;YAAA;gBAAA;gBAIA,CAAC;gBAAD,kBAAC;YAAD,CAJA,AAIC,IAAA;YAJD,qCAIC,CAAA","file":"app/common/rest.response.js","sourcesContent":["export class RestReponse {\n  public status:string;\n  public message:string;\n  public data:any;\n}\n"],"sourceRoot":"/source/"}

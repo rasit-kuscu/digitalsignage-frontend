@@ -1,0 +1,1 @@
+{"version":3,"sources":["app/role/models/privilege.ts"],"names":[],"mappings":";;;;;;;YAAA;gBAAA;oBAGS,cAAS,GAAY,KAAK,CAAC;gBACpC,CAAC;gBAAD,gBAAC;YAAD,CAJA,AAIC,IAAA;YAJD,iCAIC,CAAA","file":"app/role/models/privilege.js","sourcesContent":["export class Privilege {\n  public id: number;\n  public name: string;\n  public isChecked: boolean = false;\n}\n"],"sourceRoot":"/source/"}

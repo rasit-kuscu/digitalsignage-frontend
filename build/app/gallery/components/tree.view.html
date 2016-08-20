@@ -1,0 +1,11 @@
+<ul style="list-style: none;">
+    <li *ngFor="let node of nodes">
+        <span class="glyphicon"
+          [class.glyphicon-triangle-right]="node.getIcon()=='+'"
+          [class.glyphicon-triangle-bottom]="node.getIcon()=='-'"
+          (click)="node.toggle()"></span>&nbsp; {{ node.name }} <button (click)="onClick(node)">Agree</button>
+          <div *ngIf="node.expanded">
+            <tree-view [nodes]="node.nodes" (onNotify)="onNotifyChild(node)"></tree-view>
+          </div>
+    </li>
+</ul>

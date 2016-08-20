@@ -1,0 +1,20 @@
+<ul class>
+    <li *ngFor="let node of nodes">
+
+        <button class="iconButton" (click)="node.toggle()">+</button> {{ node.name }}
+
+        <div>
+<!--
+            <ul>
+                <li *ngFor="let file of dir.files">{{file}}</li>
+            </ul>
+-->
+
+          <div *ngIf="node.expanded">
+            <tree-view [nodes]="node.nodes"></tree-view>
+          </div>
+
+        </div>
+
+    </li>
+</ul>

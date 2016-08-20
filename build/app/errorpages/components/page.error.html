@@ -1,0 +1,19 @@
+<div class="error-wrapper">
+  <div class="middle">
+    <div class="error-content">
+      <div *ngIf="needLogin">
+        <div class="alert alert-danger" role="alert" style="width:%40;">
+          <b>Giriş yapmanız gerekli !</b> Görünen o ki sisteme tekrar giriş yapmanız gerekiyor.
+        </div>
+        <a [routerLink]="['/login']">Giriş Yap</a>
+      </div>
+      <div *ngIf="needPermission">
+        <div class="alert alert-danger" role="alert" style="width:%40;">
+          <b>Yetkiniz yok !</b> Görünen o ki bu sayfaya erişmek için yetkiniz bulunmuyor. <br/>
+          Eğer bunun bir hata olduğunu düşünüyorsanız lütfen sistem yöneticisi ile irtibat kurun.
+        </div>
+        <a [routerLink]="['/home']">Ana Sayfa</a>
+      </div>
+    </div>
+  </div>
+</div>

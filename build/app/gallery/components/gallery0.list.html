@@ -1,0 +1,135 @@
+<loader-animation *ngIf="!isDataAvailable"></loader-animation>
+<div *ngIf="isDataAvailable">
+  <div class="row">
+    <div class="col-md-12">
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-9">
+      <ol class="breadcrumb">
+        <li *ngFor="let bc of breadcrumb" [class.active]="currentNode.id == bc.id">
+          <a *ngIf="currentNode.id != bc.id" [routerLink]="['/item', 'gallery', {id: bc.id}]">{{bc.name}}</a>
+          <span *ngIf="currentNode.id == bc.id">{{bc.name}}</span>
+        </li>
+      </ol>
+    </div>
+    <div class="col-md-3" style="text-align:right">
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          İşlemler <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a style="cursor: pointer" (click)="openNodeModal('new', currentNode)">Yeni Klasör Ekle</a></li>
+          <li role="separator" class="divider"></li>
+          <li ><a style="cursor: pointer" (click)="openNodeModal('edit', 'main', currentNode)">Adını Değiştir</a></li>
+          <li *ngIf="currentNode.parentNodeId != null"><a style="cursor: pointer" (click)="openNodeModal('move', 'main', currentNode)">Taşı</a></li>
+          <li *ngIf="currentNode.parentNodeId != null"><a style="cursor: pointer" (click)="openNodeModal('delete', 'main', currentNode)">Sil</a></li>
+        </ul>
+      </div>
+      <button type="button" class="btn btn-success">Yeni İçerik Ekle</button>
+    </div>
+  </div>
+  <table class="table" style="font-size:14px;">
+    <thead>
+      <tr>
+        <th style="width:70%">Ad</th>
+        <th style="width:15%; text-align:right">Son Değiştirilme</th>
+        <th style="width:15%; text-align:right">Boyut</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="isTableAvailable">
+      <tr *ngFor="let node of nodes" (contextmenu)="onContextMenu($event, node)">
+        <td>
+          <span class="glyphicon glyphicon-folder-close"></span>&nbsp;
+          <a [routerLink]="['/item', 'gallery', {id: node.id}]"><b>{{node.name}}</b></a>
+        </td>
+        <td style="text-align:right">{{node.lastUpdate | amTimeAgo}}</td>
+        <td style="text-align:right">—</td>
+      </tr>
+
+      <tr *ngFor="let item of items">
+        <td><span class="glyphicon glyphicon-folder-close"></span>&nbsp;{{item}}</td>
+        <td style="text-align:right">3 gün önce</td>
+        <td style="text-align:right">—</td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="!isTableAvailable">
+      <tr>
+        <td colspan="4" style="text-align: center;">Yükleniyor...</td>
+      </tr>
+    </tbody>
+  </table>
+  <context-menu></context-menu>
+</div>
+
+<modal #nodeNewModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
+  <modal-header>
+    <h4 class="modal-title">Yeni Klasör</h4>
+  </modal-header>
+  <modal-body>
+    <form role="form" id="newNodeForm" [formGroup]="newNodeForm" (submit)="save()">
+      <div class="form-group">
+        <label for="name">Klasör Adı</label>
+        <input type="text" class="form-control" id="name" formControlName="name" placeholder="Klasör Adı">
+        <control-messages [control]="newNodeForm.controls.name"></control-messages>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="isModalProccessing" (click)="nodeNewModal.dismiss()">İptal</button>
+    <button class="btn btn-success" form="newNodeForm" [disabled]="!newNodeForm.valid || isModalProccessing">Kaydet</button>
+  </modal-footer>
+</modal>
+
+<modal #nodeEditModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
+  <modal-header>
+    <h4 class="modal-title"><span *ngIf="editingNode != null">&laquo; {{editingNode.name}} &raquo;</span>  Klasör Adını Değiştir</h4>
+  </modal-header>
+  <modal-body>
+    <form role="form" id="editNodeForm" [formGroup]="editNodeForm" (submit)="update()">
+      <div class="form-group">
+        <label for="name">Klasör Adı</label>
+        <input type="text" class="form-control" id="name" formControlName="name" placeholder="Klasör Adı">
+        <control-messages [control]="editNodeForm.controls.name"></control-messages>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="isModalProccessing" (click)="nodeEditModal.dismiss()">İptal</button>
+    <button class="btn btn-success" form="editNodeForm" [disabled]="!editNodeForm.valid || isModalProccessing">Değiştir</button>
+  </modal-footer>
+</modal>
+
+<modal #nodeDeleteModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
+  <modal-header>
+    <h4 class="modal-title"><span *ngIf="editingNode != null">&laquo; {{editingNode.name}} &raquo;</span>  Klasörü Sil</h4>
+  </modal-header>
+  <modal-body>
+    <div *ngIf="!isModalProccessing">Bu işlemi yapmak istediğinizden emin misiniz?</div>
+    <div *ngIf="isModalProccessing">İşleminiz yapılıyor, lütfen bekleyiniz..</div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="isModalProccessing" (click)="nodeDeleteModal.dismiss()">İptal</button>
+    <button type="button" class="btn btn-danger" [disabled]="isModalProccessing" (click)="delete()">Devam Et</button>
+  </modal-footer>
+</modal>
+
+<modal #nodeMoveModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
+  <modal-header>
+    <h4 class="modal-title"><span *ngIf="editingNode != null">&laquo; {{editingNode.name}} &raquo;</span> Klasörü Taşı</h4>
+  </modal-header>
+  <modal-body>
+    <div id="scroll-wrapper">
+      <div class="scrollbar" id="style-1">
+        <Tree [nodes]="nodeTree" [options]="customTemplateStringOptions" (onActiveChanged)="onEvent($event)"></Tree>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="isModalProccessing" (click)="nodeMoveModal.dismiss()">İptal</button>
+    <button type="button" class="btn btn-success" [disabled]="isModalProccessing || !moveSelectNode" (click)="move()">Taşı</button>
+  </modal-footer>
+</modal>
+
+<simple-notifications [options]="notificationOptions"></simple-notifications>
