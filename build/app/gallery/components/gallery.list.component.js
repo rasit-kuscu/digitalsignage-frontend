@@ -86,11 +86,17 @@ System.register(["@angular/core", '@angular/common', '@angular/router', '@angula
                         _this.editingNode['parentNode']['id'] = $event.node.id;
                     };
                     this.uploader = new ng2_file_upload_1.FileUploader({
-                        url: 'https://evening-anchorage-3159.herokuapp.com/api/',
-                        allowedMimeType: ['image/png', 'image/gif', 'video/mp4', 'image/jpeg']
+                        url: 'http://localhost:8080/api/gallery/upload',
+                        authToken: 'Bearer ' + localStorage.getItem('id_token'),
+                        allowedMimeType: ['image/png', 'image/gif', 'video/mp4', 'image/jpeg'],
+                        removeAfterUpload: true
                     });
                     this.uploader.onCompleteAll = function () {
                         console.log('complete');
+                    };
+                    this.uploader.onCompleteItem = function (item, response, status, headers) {
+                        var responsePath = JSON.parse(response);
+                        _this.items.push(responsePath[0]);
                     };
                 }
                 GalleryListComponent.prototype.ngAfterViewInit = function () {
@@ -102,26 +108,41 @@ System.register(["@angular/core", '@angular/common', '@angular/router', '@angula
                 GalleryListComponent.prototype.fileOverBase = function (e) {
                     this.hasBaseDropZoneOver = e;
                 };
-                GalleryListComponent.prototype.onContextMenu = function ($event, item) {
+                GalleryListComponent.prototype.onContextMenu = function ($event, item, type) {
                     var _this = this;
                     this.contextMenuService.show.next({
                         actions: [
                             {
                                 html: function () { return "Ad\u0131n\u0131 De\u011Fi\u015Ftir"; },
                                 click: function (item) {
-                                    _this.openNodeModal('edit', 'sub', item);
+                                    if (type === 'node') {
+                                        _this.openNodeModal('edit', 'sub', item);
+                                    }
+                                    else if (type === 'item') {
+                                        console.log('item rename');
+                                    }
                                 }
                             },
                             {
                                 html: function () { return "Ta\u015F\u0131"; },
                                 click: function (item) {
-                                    _this.openNodeModal('move', 'sub', item);
+                                    if (type === 'node') {
+                                        _this.openNodeModal('move', 'sub', item);
+                                    }
+                                    else if (type === 'item') {
+                                        console.log('item move');
+                                    }
                                 }
                             },
                             {
                                 html: function () { return "Sil"; },
                                 click: function (item) {
-                                    _this.openNodeModal('delete', 'sub', item);
+                                    if (type === 'node') {
+                                        _this.openNodeModal('delete', 'sub', item);
+                                    }
+                                    else if (type === 'item') {
+                                        console.log('item remove');
+                                    }
                                 }
                             }
                         ],
@@ -141,6 +162,9 @@ System.register(["@angular/core", '@angular/common', '@angular/router', '@angula
                             id = 0;
                         }
                         _this.load(id);
+                        _this.uploader.onBuildItemForm = function (item, form) {
+                            form.append('nodeId', _this.currentNode['id']);
+                        };
                     });
                     this.newNodeForm = this.formBuilder.group({
                         'name': ['', forms_1.Validators.required]
@@ -178,7 +202,7 @@ System.register(["@angular/core", '@angular/common', '@angular/router', '@angula
                         _this.breadcrumb = response.data.breadcrumb;
                         _this.currentNode = response.data.node;
                         _this.nodes = response.data.nodes;
-                        _this.items = ['item1', 'item2'];
+                        _this.items = _this.currentNode['item'];
                         _this.isTableAvailable = true;
                         _this.isDataAvailable = true;
                     }, function (error) {
@@ -324,6 +348,21 @@ System.register(["@angular/core", '@angular/common', '@angular/router', '@angula
                     }, function (error) {
                         _this.router.navigate(['/error', { status: error.status, message: encodeURIComponent(error._body) }]);
                     });
+                };
+                GalleryListComponent.prototype.humanFileSize = function (bytes, si) {
+                    var thresh = si ? 1000 : 1024;
+                    if (Math.abs(bytes) < thresh) {
+                        return bytes + ' B';
+                    }
+                    var units = si
+                        ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+                        : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+                    var u = -1;
+                    do {
+                        bytes /= thresh;
+                        ++u;
+                    } while (Math.abs(bytes) >= thresh && u < units.length - 1);
+                    return bytes.toFixed(1) + ' ' + units[u];
                 };
                 __decorate([
                     core_1.ViewChild('nodeEditModal'), 

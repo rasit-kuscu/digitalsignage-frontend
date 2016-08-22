@@ -39,7 +39,7 @@
       </tr>
     </thead>
     <tbody *ngIf="isTableAvailable">
-      <tr *ngFor="let node of nodes" (contextmenu)="onContextMenu($event, node)">
+      <tr *ngFor="let node of nodes" (contextmenu)="onContextMenu($event, node, 'node')">
         <td>
           <span class="glyphicon glyphicon-folder-close"></span>&nbsp;
           <a [routerLink]="['/item', 'gallery', {id: node.id}]"><b>{{node.name}}</b></a>
@@ -47,11 +47,22 @@
         <td style="text-align:right">{{node.lastUpdate | amTimeAgo}}</td>
         <td style="text-align:right">—</td>
       </tr>
-
-      <tr *ngFor="let item of items">
-        <td><span class="glyphicon glyphicon-folder-close"></span>&nbsp;{{item}}</td>
-        <td style="text-align:right">3 gün önce</td>
-        <td style="text-align:right">—</td>
+      <tr *ngFor="let item of items" (contextmenu)="onContextMenu($event, item, 'item')">
+        <td>
+          <span *ngIf="item.gallery.type == 'image/png' ||
+          item.gallery.type == 'image/gif' ||
+          item.gallery.type == 'image/jpeg'"
+          class="glyphicon glyphicon-picture"></span>
+          <span *ngIf="item.gallery.type == 'video/mp4'" class="glyphicon glyphicon-film"></span>
+          &nbsp;<a>{{item.name}}</a>
+        </td>
+        <td style="text-align:right">{{item.updatedAt | amTimeAgo}}</td>
+        <td style="text-align:right">{{humanFileSize(item.gallery.size, true)}}</td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="isTableAvailable && nodes.length === 0 && items.length === 0">
+      <tr>
+        <td colspan="4" style="text-align: center;">Klasör boş, bir şeyler yükleyin.</td>
       </tr>
     </tbody>
     <tbody *ngIf="!isTableAvailable">

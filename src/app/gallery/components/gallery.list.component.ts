@@ -80,12 +80,18 @@ export class GalleryListComponent implements OnInit {
 		private _notificationService: NotificationsService,
 		private contextMenuService: ContextMenuService) {
 			this.uploader = new FileUploader({
-				url: 'https://evening-anchorage-3159.herokuapp.com/api/',
-				allowedMimeType: ['image/png', 'image/gif', 'video/mp4', 'image/jpeg']
+				url: 'http://localhost:8080/api/gallery/upload',
+				authToken: 'Bearer ' + localStorage.getItem('id_token'),
+				allowedMimeType: ['image/png', 'image/gif', 'video/mp4', 'image/jpeg'],
+				removeAfterUpload: true
 			});
 			this.uploader.onCompleteAll = () => {
     		console.log('complete');
   		};
+			this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+				let responsePath = JSON.parse(response);
+				this.items.push(responsePath[0]);
+			};
   }
 
 	ngAfterViewInit() {
@@ -98,25 +104,37 @@ export class GalleryListComponent implements OnInit {
 		this.hasBaseDropZoneOver = e;
 	}
 
-	public onContextMenu($event: MouseEvent, item: any): void {
+	public onContextMenu($event: MouseEvent, item: any, type: any): void {
 		this.contextMenuService.show.next({
       actions: [
         {
           html: () => `Adını Değiştir`,
           click: (item) =>  {
-						this.openNodeModal('edit', 'sub', item);
+						if (type === 'node') {
+							this.openNodeModal('edit', 'sub', item);
+						} else if (type === 'item') {
+							console.log('item rename');
+						}
 					}
         },
         {
           html: () => `Taşı`,
           click: (item) => {
-						this.openNodeModal('move', 'sub', item);
+						if (type === 'node') {
+							this.openNodeModal('move', 'sub', item);
+						} else if (type === 'item') {
+							console.log('item move');
+						}
 					}
         },
 				{
           html: () => `Sil`,
           click: (item) => {
-						this.openNodeModal('delete', 'sub', item);
+						if (type === 'node') {
+							this.openNodeModal('delete', 'sub', item);
+						} else if (type === 'item') {
+							console.log('item remove');
+						}
 					}
         }
       ],
@@ -138,6 +156,10 @@ export class GalleryListComponent implements OnInit {
 				}
 
 				this.load(id);
+
+				this.uploader.onBuildItemForm = (item, form) => {
+					form.append('nodeId', this.currentNode['id']);
+				};
       });
 
 			this.newNodeForm = this.formBuilder.group({
@@ -183,7 +205,7 @@ export class GalleryListComponent implements OnInit {
 				this.breadcrumb = response.data.breadcrumb;
 				this.currentNode = response.data.node;
 				this.nodes = response.data.nodes;
-				this.items = ['item1', 'item2'];
+				this.items = this.currentNode['item'];
 
 				this.isTableAvailable = true;
 				this.isDataAvailable = true;
@@ -336,5 +358,23 @@ export class GalleryListComponent implements OnInit {
 				this.router.navigate(['/error', {status: error.status, message: encodeURIComponent(error._body)}]);
 			}
 		);
+	}
+
+	humanFileSize(bytes, si) {
+    let thresh = si ? 1000 : 1024;
+    if (Math.abs(bytes) < thresh) {
+        return bytes + ' B';
+    }
+
+    let units = si
+        ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+        : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+    let u = -1;
+    do {
+        bytes /= thresh;
+        ++u;
+    } while (Math.abs(bytes) >= thresh && u < units.length - 1);
+
+    return bytes.toFixed(1) + ' ' + units[u];
 	}
 }
