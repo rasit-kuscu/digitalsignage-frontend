@@ -10,6 +10,7 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class UserService {
+  // page number
   public itemsPerPage:number;
 
   constructor(public authHttp:AuthHttp, private  _sharedService: SharedService) {
