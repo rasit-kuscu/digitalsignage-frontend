@@ -1,4 +1,5 @@
 before_script:
   - npm install gulp
+  - npm install
   - npm install typescript-register ts-node
 script: gulp build
