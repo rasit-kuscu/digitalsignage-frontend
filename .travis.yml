@@ -1,8 +1,7 @@
 before_script:
   - npm i -g typescript typings
   - typings install
-  - tsc
   - npm install gulp
   - npm install
   - npm install typescript-register ts-node
-script: gulp build
+script: npm run build
