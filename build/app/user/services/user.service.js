@@ -54,6 +54,14 @@ System.register(['@angular/core', 'angular2-jwt', '../../common/headers', '../..
                     return this.authHttp.put(this._sharedService.apiUrl + 'user/update', JSON.stringify(user), { headers: headers_1.contentHeaders })
                         .map(function (response) { return response.json(); });
                 };
+                UserService.prototype.service = function () {
+                    return this.authHttp.get(this._sharedService.apiUrl + 'user/service')
+                        .map(function (response) { return response.json(); });
+                };
+                UserService.prototype.service_update = function (serviceUser) {
+                    return this.authHttp.put(this._sharedService.apiUrl + 'user/service_update', JSON.stringify(serviceUser), { headers: headers_1.contentHeaders })
+                        .map(function (response) { return response.json(); });
+                };
                 UserService = __decorate([
                     core_1.Injectable(), 
                     __metadata('design:paramtypes', [angular2_jwt_1.AuthHttp, shared_service_1.SharedService])

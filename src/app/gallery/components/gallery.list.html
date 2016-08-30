@@ -49,11 +49,8 @@
       </tr>
       <tr *ngFor="let item of items" (contextmenu)="onContextMenu($event, item, 'item')">
         <td>
-          <span *ngIf="item.gallery.type == 'image/png' ||
-          item.gallery.type == 'image/gif' ||
-          item.gallery.type == 'image/jpeg'"
-          class="glyphicon glyphicon-picture"></span>
-          <span *ngIf="item.gallery.type == 'video/mp4'" class="glyphicon glyphicon-film"></span>
+          <span *ngIf="item.gallery.type === 'image'" class="glyphicon glyphicon-picture"></span>
+          <span *ngIf="item.gallery.type === 'video'" class="glyphicon glyphicon-film"></span>
           &nbsp;<a>{{item.name}}</a>
         </td>
         <td style="text-align:right">{{item.updatedAt | amTimeAgo}}</td>

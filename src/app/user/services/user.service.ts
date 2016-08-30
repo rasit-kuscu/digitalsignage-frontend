@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import { Response } from '@angular/http';
 import { AuthHttp } from 'angular2-jwt';
 import { User } from '../models/user';
+import { ServiceUser } from '../models/service.user';
 import { RestReponse } from '../../common/rest.response';
 import { contentHeaders } from '../../common/headers';
 import { SharedService } from '../../common/services/shared.service';
@@ -39,6 +40,16 @@ export class UserService {
 
   public update(user: User): Observable<RestReponse> {
     return this.authHttp.put(this._sharedService.apiUrl + 'user/update', JSON.stringify(user), {headers: contentHeaders})
+      .map((response: Response) => <RestReponse>response.json());
+  }
+
+  public service(): Observable<RestReponse> {
+    return this.authHttp.get(this._sharedService.apiUrl + 'user/service')
+      .map((response: Response) => <RestReponse>response.json());
+  }
+
+  public service_update(serviceUser: ServiceUser): Observable<RestReponse> {
+    return this.authHttp.put(this._sharedService.apiUrl + 'user/service_update', JSON.stringify(serviceUser), {headers: contentHeaders})
       .map((response: Response) => <RestReponse>response.json());
   }
 }

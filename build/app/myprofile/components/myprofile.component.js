@@ -1,4 +1,4 @@
-System.register(["@angular/core", '@angular/router', '@angular/forms', 'angular2-notifications', '../../common/services/validation.service', '../../common/components/loader.animation', '../../common/components/control.messages', '../services/myprofile.service', '../models/myprofile'], function(exports_1, context_1) {
+System.register(["@angular/core", '@angular/router', '@angular/forms', 'angular2-notifications', '../../common/services/validation.service', '../../common/components/loader.animation', '../../common/components/control.messages', '../services/myprofile.service', '../models/myprofile', '../../group/models/group'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(["@angular/core", '@angular/router', '@angular/forms', 'angular2
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, forms_1, angular2_notifications_1, validation_service_1, loader_animation_1, control_messages_1, myprofile_service_1, myprofile_1;
+    var core_1, router_1, forms_1, angular2_notifications_1, validation_service_1, loader_animation_1, control_messages_1, myprofile_service_1, myprofile_1, group_1;
     var MyProfileComponent;
     return {
         setters:[
@@ -40,6 +40,9 @@ System.register(["@angular/core", '@angular/router', '@angular/forms', 'angular2
             },
             function (myprofile_1_1) {
                 myprofile_1 = myprofile_1_1;
+            },
+            function (group_1_1) {
+                group_1 = group_1_1;
             }],
         execute: function() {
             MyProfileComponent = (function () {
@@ -70,7 +73,7 @@ System.register(["@angular/core", '@angular/router', '@angular/forms', 'angular2
                             _this.myProfile = response.data;
                             _this.myProfileForm.controls.username.updateValue(response.data.username);
                             _this.myProfileForm.controls.email.updateValue(response.data.email);
-                            _this.myProfileForm.controls.default_group_id.updateValue(response.data.defaultGroupId);
+                            _this.myProfileForm.controls.default_group_id.updateValue(response.data.group.id);
                             _this.isDataAvailable = true;
                         }
                     }, function (error) {
@@ -85,7 +88,7 @@ System.register(["@angular/core", '@angular/router', '@angular/forms', 'angular2
                     var myProfile = new myprofile_1.MyProfile();
                     myProfile.email = this.myProfileForm.value.email;
                     myProfile.password = this.myProfileForm.value.passwords.password;
-                    myProfile.defaultGroupId = this.defaultGroupIdValue;
+                    myProfile.group = new group_1.Group(this.defaultGroupIdValue, 'Selected');
                     this._notificationService.alert('Kaydediliyor', 'İşleminiz yapılıyor, lütfen bekleyiniz.', { timeOut: 0, clickToClose: false });
                     this.isSaving = true;
                     this._myProfileService.save(myProfile)

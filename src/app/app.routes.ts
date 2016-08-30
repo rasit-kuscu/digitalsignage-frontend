@@ -6,6 +6,7 @@ import { MyProfileComponent } from './myprofile/components/myprofile.component';
 import { ManagementMainComponent } from './management/management.main.component';
 import { UserNewComponent } from './user/components/user.new.component';
 import { UserEditComponent } from './user/components/user.edit.component';
+import { ServiceEditComponent } from './user/components/service.edit.component';
 import { UserListComponent } from './user/components/user.list.component';
 import { RoleListComponent } from './role/components/role.list.component';
 import { RoleEditComponent } from './role/components/role.edit.component';
@@ -25,6 +26,7 @@ export const routes: RouterConfig = [
   { path: 'myprofile',   component: MyProfileComponent, canActivate: [AuthGuard] },
   { path: 'user/new',   component: UserNewComponent, canActivate: [AuthGuard] },
   { path: 'user/edit',   component: UserEditComponent, canActivate: [AuthGuard] },
+  { path: 'user/service',   component: ServiceEditComponent, canActivate: [AuthGuard] },
   { path: 'role/new',   component: RoleNewComponent, canActivate: [AuthGuard] },
   { path: 'role/edit',   component: RoleEditComponent, canActivate: [AuthGuard] },
   { path: 'group/new',   component: GroupNewComponent, canActivate: [AuthGuard] },

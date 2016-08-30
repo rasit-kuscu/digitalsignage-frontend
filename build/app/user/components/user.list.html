@@ -13,7 +13,7 @@
           <tr *ngFor="let user of users;">
             <td>{{user.username}}</td>
             <td>{{user.email}}</td>
-            <td>
+            <td style="vertical-align: middle;">
               <span class="label label-success" *ngIf=user.accountNonLocked>Aktif</span>
               <span class="label label-danger" *ngIf=!user.accountNonLocked>Kilitli</span>
             </td>

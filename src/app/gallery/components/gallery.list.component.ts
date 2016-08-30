@@ -82,7 +82,7 @@ export class GalleryListComponent implements OnInit {
 			this.uploader = new FileUploader({
 				url: 'http://localhost:8080/api/gallery/upload',
 				authToken: 'Bearer ' + localStorage.getItem('id_token'),
-				allowedMimeType: ['image/png', 'image/gif', 'video/mp4', 'image/jpeg'],
+				allowedMimeType: ['image/png', 'video/mp4', 'image/jpeg'],
 				removeAfterUpload: true
 			});
 			this.uploader.onCompleteAll = () => {

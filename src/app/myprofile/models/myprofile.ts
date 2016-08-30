@@ -1,7 +1,9 @@
+import { Group } from '../../group/models/group';
+
 export class MyProfile {
   public username: string;
   public email: string;
   public password: string;
-  public defaultGroupId:number;
+  public group:Group;
   public groups: string[];
 }

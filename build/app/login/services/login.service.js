@@ -34,7 +34,7 @@ System.register(['@angular/core', '@angular/http', '../../common/headers', '../.
                     this._sharedService = _sharedService;
                 }
                 LoginService.prototype.login = function (login) {
-                    return this.http.post(this._sharedService.apiUrl + 'auth', JSON.stringify(login), { headers: headers_1.contentHeaders })
+                    return this.http.post(this._sharedService.apiUrl + 'auth/client', JSON.stringify(login), { headers: headers_1.contentHeaders })
                         .map(function (response) { return response.json(); });
                 };
                 LoginService = __decorate([

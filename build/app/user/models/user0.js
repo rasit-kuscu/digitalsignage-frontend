@@ -6,13 +6,14 @@ System.register([], function(exports_1, context_1) {
         setters:[],
         execute: function() {
             User = (function () {
-                function User(id, username, email, password, groups, roles) {
+                function User(id, username, email, password, groups, roles, accountNonLocked) {
                     this.id = id;
                     this.username = username;
                     this.email = email;
                     this.password = password;
                     this.groups = groups;
                     this.roles = roles;
+                    this.accountNonLocked = accountNonLocked;
                 }
                 return User;
             }());

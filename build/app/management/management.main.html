@@ -18,6 +18,7 @@
       <a *ngIf="_sharedService.checkAuthority('USER_VIEW')" [routerLink]="['/management','user']" [routerLinkActive]="['active']" class="list-group-item">Kullanıcılar</a>
       <a *ngIf="_sharedService.checkAuthority('ROLE_VIEW')" [routerLink]="['/management','role']" [routerLinkActive]="['active']" class="list-group-item">Yetkiler</a>
       <a *ngIf="_sharedService.checkAuthority('GROUP_VIEW')" [routerLink]="['/management','group']" [routerLinkActive]="['active']" class="list-group-item">Gruplar</a>
+      <a *ngIf="_sharedService.checkAuthority('GROUP_VIEW')" [routerLink]="['/user','service']" [routerLinkActive]="['active']" class="list-group-item">Servis Kullanıcısı</a>
     </div>
   </div>
   <div class="col-md-9">

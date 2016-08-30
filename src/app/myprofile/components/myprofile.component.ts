@@ -9,6 +9,7 @@ import { LoaderAnimation } from '../../common/components/loader.animation';
 import { ControlMessages } from '../../common/components/control.messages';
 import { MyProfileService } from '../services/myprofile.service';
 import { MyProfile } from '../models/myprofile';
+import { Group } from '../../group/models/group';
 
 @Component({
 	selector: "myprofile",
@@ -48,7 +49,7 @@ export class MyProfileComponent implements OnInit {
 					this.myProfile = response.data;
 					this.myProfileForm.controls.username.updateValue(response.data.username);
 	        this.myProfileForm.controls.email.updateValue(response.data.email);
-	        this.myProfileForm.controls.default_group_id.updateValue(response.data.defaultGroupId);
+	        this.myProfileForm.controls.default_group_id.updateValue(response.data.group.id);
 					this.isDataAvailable = true;
 				}
 			},
@@ -66,7 +67,7 @@ export class MyProfileComponent implements OnInit {
 		let myProfile = new MyProfile();
 		myProfile.email = this.myProfileForm.value.email;
 		myProfile.password = this.myProfileForm.value.passwords.password;
-		myProfile.defaultGroupId = this.defaultGroupIdValue;
+		myProfile.group = new Group(this.defaultGroupIdValue, 'Selected');
 
 		this._notificationService.alert('Kaydediliyor', 'İşleminiz yapılıyor, lütfen bekleyiniz.', {timeOut:0, clickToClose:false});
 		this.isSaving = true;

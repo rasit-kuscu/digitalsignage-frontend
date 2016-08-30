@@ -12,7 +12,7 @@ export class LoginService {
   }
 
   public login(login:Login): Observable<Login> {
-    return this.http.post(this._sharedService.apiUrl + 'auth', JSON.stringify(login), {headers: contentHeaders})
+    return this.http.post(this._sharedService.apiUrl + 'auth/client', JSON.stringify(login), {headers: contentHeaders})
       .map((response: Response) => <Login>response.json());
   }
 }

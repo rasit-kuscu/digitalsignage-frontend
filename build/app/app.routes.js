@@ -1,7 +1,7 @@
-System.register(['./common/auth.guard', './login/components/login.component', './home/components/home.component', './myprofile/components/myprofile.component', './management/management.main.component', './user/components/user.new.component', './user/components/user.edit.component', './user/components/user.list.component', './role/components/role.list.component', './role/components/role.edit.component', './role/components/role.new.component', './group/components/group.list.component', './group/components/group.new.component', './group/components/group.edit.component', './item/item.main.component', './gallery/components/gallery.list.component', './gallery/components/gallery.new.component', './errorpages/components/page.error'], function(exports_1, context_1) {
+System.register(['./common/auth.guard', './login/components/login.component', './home/components/home.component', './myprofile/components/myprofile.component', './management/management.main.component', './user/components/user.new.component', './user/components/user.edit.component', './user/components/service.edit.component', './user/components/user.list.component', './role/components/role.list.component', './role/components/role.edit.component', './role/components/role.new.component', './group/components/group.list.component', './group/components/group.new.component', './group/components/group.edit.component', './item/item.main.component', './gallery/components/gallery.list.component', './gallery/components/gallery.new.component', './errorpages/components/page.error'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var auth_guard_1, login_component_1, home_component_1, myprofile_component_1, management_main_component_1, user_new_component_1, user_edit_component_1, user_list_component_1, role_list_component_1, role_edit_component_1, role_new_component_1, group_list_component_1, group_new_component_1, group_edit_component_1, item_main_component_1, gallery_list_component_1, gallery_new_component_1, page_error_1;
+    var auth_guard_1, login_component_1, home_component_1, myprofile_component_1, management_main_component_1, user_new_component_1, user_edit_component_1, service_edit_component_1, user_list_component_1, role_list_component_1, role_edit_component_1, role_new_component_1, group_list_component_1, group_new_component_1, group_edit_component_1, item_main_component_1, gallery_list_component_1, gallery_new_component_1, page_error_1;
     var routes;
     return {
         setters:[
@@ -25,6 +25,9 @@ System.register(['./common/auth.guard', './login/components/login.component', '.
             },
             function (user_edit_component_1_1) {
                 user_edit_component_1 = user_edit_component_1_1;
+            },
+            function (service_edit_component_1_1) {
+                service_edit_component_1 = service_edit_component_1_1;
             },
             function (user_list_component_1_1) {
                 user_list_component_1 = user_list_component_1_1;
@@ -67,6 +70,7 @@ System.register(['./common/auth.guard', './login/components/login.component', '.
                 { path: 'myprofile', component: myprofile_component_1.MyProfileComponent, canActivate: [auth_guard_1.AuthGuard] },
                 { path: 'user/new', component: user_new_component_1.UserNewComponent, canActivate: [auth_guard_1.AuthGuard] },
                 { path: 'user/edit', component: user_edit_component_1.UserEditComponent, canActivate: [auth_guard_1.AuthGuard] },
+                { path: 'user/service', component: service_edit_component_1.ServiceEditComponent, canActivate: [auth_guard_1.AuthGuard] },
                 { path: 'role/new', component: role_new_component_1.RoleNewComponent, canActivate: [auth_guard_1.AuthGuard] },
                 { path: 'role/edit', component: role_edit_component_1.RoleEditComponent, canActivate: [auth_guard_1.AuthGuard] },
                 { path: 'group/new', component: group_new_component_1.GroupNewComponent, canActivate: [auth_guard_1.AuthGuard] },

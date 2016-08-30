@@ -88,7 +88,7 @@ System.register(["@angular/core", '@angular/common', '@angular/router', '@angula
                     this.uploader = new ng2_file_upload_1.FileUploader({
                         url: 'http://localhost:8080/api/gallery/upload',
                         authToken: 'Bearer ' + localStorage.getItem('id_token'),
-                        allowedMimeType: ['image/png', 'image/gif', 'video/mp4', 'image/jpeg'],
+                        allowedMimeType: ['image/png', 'video/mp4', 'image/jpeg'],
                         removeAfterUpload: true
                     });
                     this.uploader.onCompleteAll = function () {

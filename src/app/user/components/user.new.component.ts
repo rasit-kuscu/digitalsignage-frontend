@@ -134,6 +134,8 @@ export class UserNewComponent implements OnInit {
 						this._notificationService.error('Hata', 'Girilen kullanıcı adı kayıtlı.', {});
 					} else if (response.message === 'user_email_exists') {
 						this._notificationService.error('Hata', 'Girilen email adresi zaten kayıtlı.', {});
+					} else if (response.message === 'user_builtin_name') {
+						this._notificationService.error('Hata', 'Bu kullanıcı adını kullanamazsınız.', {});
 					}
 				}
 			},
