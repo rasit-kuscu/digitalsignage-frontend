@@ -108,8 +108,8 @@ export class NodeListComponent {
         }
     }
 
-    openItemModalClick(type: string) {
-        if (type === 'gallery') {
+    openItemModalClick() {
+        if (this.type === 'gallery') {
             this.nodeAction.emit({ event: 'itemModal', node: null });
         }
     }
