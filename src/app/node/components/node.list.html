@@ -35,7 +35,7 @@
       <form role="form" id="nodeEditForm" [formGroup]="nodeEditForm" (submit)="update()">
         <div class="form-group">
           <label for="name">Klasör Adı</label>
-          <input type="text" class="form-control" id="name" formControlName="name" placeholder="Klasör Adı">
+          <input type="text" class="form-control" id="name" formControlName="name" placeholder="Klasör Adı" autocomplete="off" autofocus>
           <control-messages [control]="nodeEditForm.controls.name"></control-messages>
         </div>
       </form>
@@ -54,7 +54,7 @@
     <form role="form" id="nodeNewForm" [formGroup]="nodeNewForm" (submit)="save()">
       <div class="form-group">
         <label for="name">Klasör Adı</label>
-        <input type="text" class="form-control" id="name" formControlName="name" placeholder="Klasör Adı">
+        <input type="text" class="form-control" id="name" formControlName="name" placeholder="Klasör Adı" autocomplete="off" autofocus>
         <control-messages [control]="nodeNewForm.controls.name"></control-messages>
       </div>
     </form>
@@ -104,7 +104,7 @@
       <form role="form" id="itemRenameForm" [formGroup]="itemRenameForm" (submit)="itemRename()">
         <div class="form-group">
           <label for="name">Adı</label>
-          <input type="text" class="form-control" id="name" formControlName="name" placeholder="Adı">
+          <input type="text" class="form-control" id="name" formControlName="name" placeholder="Adı" autocomplete="off" autofocus>
           <control-messages [control]="itemRenameForm.controls.name"></control-messages>
         </div>
       </form>
