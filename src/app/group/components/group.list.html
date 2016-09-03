@@ -47,7 +47,8 @@
     <h4 class="modal-title">Grup Silme</h4>
   </modal-header>
   <modal-body>
-    <div *ngIf="!isDeleting">
+    <div *ngIf="isTableAvailable && groups.length == 1">En azından bir gruba sahip olmanız gerekiyor. Dolayısıyla bu grubu silemezsiniz.</div>
+    <div *ngIf="isTableAvailable && groups.length > 1 && !isDeleting">
       Grup ile birlikte silinecek olan veriler; <br/>
       <ul>
         <li>İçerikler</li>
@@ -62,6 +63,6 @@
   </modal-body>
   <modal-footer>
     <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="isDeleting" (click)="groupDeleteModal.dismiss()">İptal</button>
-    <button type="button" class="btn btn-danger" [disabled]="isDeleting" (click)="delete()">Devam Et</button>
+    <button type="button" *ngIf="isTableAvailable && groups.length > 1" class="btn btn-danger" [disabled]="isDeleting" (click)="delete()">Devam Et</button>
   </modal-footer>
 </modal>

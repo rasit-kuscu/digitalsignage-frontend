@@ -8,6 +8,7 @@ import { contentHeaders } from '../../common/headers';
 import { SharedService } from '../../common/services/shared.service';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
+import { Headers } from '@angular/http';
 
 @Injectable()
 export class UserService {

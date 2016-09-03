@@ -2,6 +2,10 @@ table tr td {
     vertical-align: middle;
 }
 
+.simple-notification-wrapper {
+    z-index: 10 !important;
+}
+
 html {
     position: relative;
     min-height: 100%;

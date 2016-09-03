@@ -99,10 +99,16 @@ export class GroupListComponent implements OnInit {
 		.subscribe(
 			(response) => {
 				this.isDeleting = false;
+				this.groupDeleteModal.close();
 				if (response.status === 'success') {
-					this.groupDeleteModal.close();
 					this.list(this.page);
 					this._notificationService.success('İşlem Başarılı', 'Grup başarıyla silindi.', {});
+				} else if (response.status === 'fail') {
+					if (response.message === 'group_does_not_exist') {
+						this._notificationService.error('Hata', 'Seçilen grup bulunamadı.', {});
+					} else if (response.message === 'group_atleast_one') {
+						this._notificationService.error('Hata', 'En azından bir gruba sahip olmanız gerekiyor.', {});
+					}
 				} else {
 					this.router.navigate(['/error', {status: response.status, message: encodeURIComponent(response.message)}]);
 				}

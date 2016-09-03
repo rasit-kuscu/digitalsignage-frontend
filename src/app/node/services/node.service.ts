@@ -11,39 +11,54 @@ import { NodeConst } from '../models/node.const';
 
 @Injectable()
 export class NodeService {
-  public itemsPerPage:number;
+    public itemsPerPage: number;
 
-  constructor(public authHttp:AuthHttp, private  _sharedService: SharedService) {
-    this.itemsPerPage = _sharedService.itemsPerPage;
-  }
+    constructor(public authHttp: AuthHttp, private _sharedService: SharedService) {
+        this.itemsPerPage = _sharedService.itemsPerPage;
+    }
 
-  public loadTree(type: string): Observable<RestReponse> {
-    return this.authHttp.get(this._sharedService.apiUrl + 'node/load-tree/' + type)
-      .map((response: Response) => <RestReponse>response.json());
-  }
+    public loadTree(type: string): Observable<RestReponse> {
+        return this.authHttp.get(this._sharedService.apiUrl + 'node/load-tree/' + type)
+            .map((response: Response) => <RestReponse>response.json());
+    }
 
-  public load(nodeId:number, type: string): Observable<RestReponse> {
-    return this.authHttp.get(this._sharedService.apiUrl + 'node/load/' + nodeId + '/' + type)
-      .map((response: Response) => <RestReponse>response.json());
-  }
+    public load(nodeId: number, type: string): Observable<RestReponse> {
+        return this.authHttp.get(this._sharedService.apiUrl + 'node/load/' + nodeId + '/' + type)
+            .map((response: Response) => <RestReponse>response.json());
+    }
 
-  public save(node: NodeConst): Observable<RestReponse> {
-    return this.authHttp.post(this._sharedService.apiUrl + 'node/create', JSON.stringify(node), {headers: contentHeaders})
-      .map((response: Response) => <RestReponse>response.json());
-  }
+    public save(node: NodeConst): Observable<RestReponse> {
+        return this.authHttp.post(this._sharedService.apiUrl + 'node/create', JSON.stringify(node), { headers: contentHeaders })
+            .map((response: Response) => <RestReponse>response.json());
+    }
 
-  public move(node: NodeConst): Observable<RestReponse> {
-    return this.authHttp.post(this._sharedService.apiUrl + 'node/move', JSON.stringify(node), {headers: contentHeaders})
-      .map((response: Response) => <RestReponse>response.json());
-  }
+    public move(node: NodeConst): Observable<RestReponse> {
+        return this.authHttp.post(this._sharedService.apiUrl + 'node/move', JSON.stringify(node), { headers: contentHeaders })
+            .map((response: Response) => <RestReponse>response.json());
+    }
 
-  public update(node: NodeConst): Observable<RestReponse> {
-    return this.authHttp.post(this._sharedService.apiUrl + 'node/update', JSON.stringify(node), {headers: contentHeaders})
-      .map((response: Response) => <RestReponse>response.json());
-  }
+    public update(node: NodeConst): Observable<RestReponse> {
+        return this.authHttp.post(this._sharedService.apiUrl + 'node/update', JSON.stringify(node), { headers: contentHeaders })
+            .map((response: Response) => <RestReponse>response.json());
+    }
 
-  public delete(nodeId: number): Observable<RestReponse> {
-    return this.authHttp.delete(this._sharedService.apiUrl + 'node/delete/' + nodeId)
-      .map((data: Response) => <RestReponse> data.json());
-  }
+    public delete(nodeId: number): Observable<RestReponse> {
+        return this.authHttp.delete(this._sharedService.apiUrl + 'node/delete/' + nodeId)
+            .map((data: Response) => <RestReponse>data.json());
+    }
+
+    public itemRename(item: any): Observable<RestReponse> {
+        return this.authHttp.post(this._sharedService.apiUrl + 'item/rename', JSON.stringify(item), { headers: contentHeaders })
+            .map((response: Response) => <RestReponse>response.json());
+    }
+
+    public itemMove(item: any): Observable<RestReponse> {
+        return this.authHttp.post(this._sharedService.apiUrl + 'item/move', JSON.stringify(item), { headers: contentHeaders })
+            .map((response: Response) => <RestReponse>response.json());
+    }
+
+    public itemDelete(itemId: number): Observable<RestReponse> {
+        return this.authHttp.delete(this._sharedService.apiUrl + 'item/delete/' + itemId)
+            .map((data: Response) => <RestReponse>data.json());
+    }
 }
