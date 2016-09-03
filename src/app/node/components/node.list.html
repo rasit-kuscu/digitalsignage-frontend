@@ -15,7 +15,7 @@
       <ul class="dropdown-menu">
         <li><a style="cursor: pointer" (click)="openNodeModal('new', 'main', currentNode)">Yeni Klasör Ekle</a></li>
         <li role="separator" class="divider"></li>
-        <li ><a style="cursor: pointer" (click)="openNodeModal('edit', 'main', currentNode)">Adını Değiştir</a></li>
+        <li ><a style="cursor: pointer" (click)="openNodeModal('rename', 'main', currentNode)">Adını Değiştir</a></li>
         <li *ngIf="currentNode.parentNode != null"><a style="cursor: pointer" (click)="openNodeModal('move', 'main', currentNode)">Taşı</a></li>
         <li *ngIf="currentNode.parentNode != null"><a style="cursor: pointer" (click)="openNodeModal('delete', 'main', currentNode)">Sil</a></li>
       </ul>
