@@ -26,7 +26,16 @@
   </div>
 </div>
 
-<node-gallery *ngIf="type === 'GALLERY'" [type]="type" [nodes]="nodes" [items]="items" (nodeTableAction)="nodeTableAction($event)"></node-gallery>
+<node-gallery
+*ngIf="type === 'GALLERY'" 
+[type]="type"
+[nodes]="nodes"
+[items]="items"
+[mainUrl]="mainUrl"
+[thumbnailUrl]="thumbnailUrl"
+(nodeTableAction)="nodeTableAction($event)">
+</node-gallery>
+
 <simple-notifications [options]="notificationOptions"></simple-notifications>
 
 <modal #nodeEditModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
@@ -145,6 +154,25 @@
   <modal-footer>
     <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="isModalProccessing" (click)="itemDeleteModal.dismiss()">İptal</button>
     <button type="button" class="btn btn-danger" [disabled]="isModalProccessing" (click)="itemDelete()">Devam Et</button>
+  </modal-footer>
+</modal>
+
+<modal #itemNewModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
+  <modal-header>
+    <h4 class="modal-title">Yeni</h4>
+  </modal-header>
+  <modal-body>
+    <form role="form" id="itemNewForm" [formGroup]="itemNewForm" (submit)="save()">
+      <div class="form-group">
+        <label for="name">Adı</label>
+        <input type="text" class="form-control" id="name" formControlName="name" placeholder="Adı" autocomplete="off" autofocus>
+        <control-messages [control]="itemNewForm.controls.name"></control-messages>
+      </div>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="isModalProccessing" (click)="itemNewModal.dismiss()">İptal</button>
+    <button class="btn btn-success" form="nodeNewForm" [disabled]="!itemNewForm.valid || isModalProccessing">Kaydet</button>
   </modal-footer>
 </modal>
 

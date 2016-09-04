@@ -14,6 +14,13 @@
         </div>
         <a [routerLink]="['/home']">Ana Sayfa</a>
       </div>
+      <div *ngIf="internalServerError">
+        <div class="alert alert-danger" role="alert" style="width:%40;">
+          <b>Bir şeyler yanlış gitti !</b> Görünen o ki işleminizi gerçekleştirmeye çalışırken bir hata oluştu. <br/>
+          Eğer bu hatayı sürekli görüyorsanız lütfen sistem yöneticisi ile irtibat kurun.
+        </div>
+        <a [routerLink]="['/home']">Ana Sayfa</a>
+      </div>
     </div>
   </div>
 </div>

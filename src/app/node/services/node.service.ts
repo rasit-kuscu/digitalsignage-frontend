@@ -61,4 +61,9 @@ export class NodeService {
         return this.authHttp.delete(this._sharedService.apiUrl + 'item/delete/' + itemId)
             .map((data: Response) => <RestReponse>data.json());
     }
+
+    public itemView(itemId: number): Observable<RestReponse> {
+        return this.authHttp.get(this._sharedService.apiUrl + 'item/view/' + itemId)
+            .map((data: Response) => <RestReponse>data.json());
+    }
 }

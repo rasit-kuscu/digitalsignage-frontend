@@ -29,6 +29,8 @@ import { FileUploader, FILE_UPLOAD_DIRECTIVES }   from 'ng2-file-upload/ng2-file
 })
 export class GalleryListComponent implements OnInit {
     type: string = "GALLERY";
+    mainUrl: string = "";
+    thumbnailUrl: string = "";
     notificationOptions = { timeOut: 5000, maxStack: 1 };
     isDataAvailable: boolean = false;
     isTableAvailable: boolean = false;
@@ -60,15 +62,29 @@ export class GalleryListComponent implements OnInit {
             allowedMimeType: ['image/png', 'video/mp4', 'image/jpeg'],
             removeAfterUpload: true
         });
+        this.uploader.onProgressAll = () => {
+            this._notificationService.alert('Yükleniyor', 'Dosya(lar) yükleniyor, lütfen bekleyiniz.', { timeOut: 0, clickToClose: false });
+        };
         this.uploader.onCompleteAll = () => {
             console.log('complete');
         };
         this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-            if (response != null) {
-                let responsePath = JSON.parse(response);
-                this.items.push(responsePath[0]);
+            let responsePath = JSON.parse(response);
+            if (responsePath instanceof Array) {
+                if (responsePath[0]['status'] === "success") {
+                    this.items.push(responsePath[0]['data']);
+                    this._notificationService.success('İşlem Başarılı', 'Dosya başarıyla yüklendi !', {});
+                } else if (responsePath[0]['status'] === "fail") {
+                    if (responsePath[0]['message'] === "file_storage_cant_connect") {
+                        this._notificationService.error('Hata', 'Dosya servisine bağlanılamıyor !', {});
+                    } else if (responsePath[0]['message'] === "file_storage_cant_upload") {
+                        this._notificationService.error('Hata', 'Dosya yüklenemedi !', {});
+                    } else {
+                        this._notificationService.error('Hata', 'Bir şeyler yanlış gitti !', {});
+                    }
+                }
             } else {
-                // warn user
+                this.router.navigate(['/error', { status: responsePath.status, message: encodeURIComponent(response) }]);
             }
         };
     }
@@ -118,6 +134,8 @@ export class GalleryListComponent implements OnInit {
             .subscribe(
             (response) => {
                 if (response.status === 'success') {
+                    this.mainUrl = response.data.mainUrl;
+                    this.thumbnailUrl = response.data.thumbnailUrl;
                     this.breadcrumb = response.data.breadcrumb;
                     this.currentNode = response.data.node;
                     this.nodes = response.data.nodes;

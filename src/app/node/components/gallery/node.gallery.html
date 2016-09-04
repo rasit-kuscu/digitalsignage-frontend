@@ -19,7 +19,7 @@
       <td>
         <span *ngIf="item.galleryItem.type === 'image'" class="glyphicon glyphicon-picture"></span>
         <span *ngIf="item.galleryItem.type === 'video'" class="glyphicon glyphicon-film"></span>
-        &nbsp;<a>{{item.name}}</a>
+        &nbsp;<a [routerLink]="['/gallery-view', {id: item.id}]">{{item.name}}</a>
       </td>
       <td style="text-align:right">{{item.updatedAt | amTimeAgo}}</td>
       <td style="text-align:right">{{humanFileSize(item.galleryItem.size, true)}}</td>

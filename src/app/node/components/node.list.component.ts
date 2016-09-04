@@ -22,6 +22,8 @@ import { SharedService } from '../../common/services/shared.service';
 })
 export class NodeListComponent {
     @Input() type: string;
+    @Input() mainUrl: string;
+    @Input() thumbnailUrl: string;
     @Input() breadcrumb: any[];
     @Input() currentNode: any;
     @Input() nodes: NodeConst[] = [];
@@ -46,6 +48,8 @@ export class NodeListComponent {
     itemMoveModal: ModalComponent;
     @ViewChild('itemDeleteModal')
     itemDeleteModal: ModalComponent;
+    @ViewChild('itemNewModal')
+    itemNewModal: ModalComponent;
 
     nodeTreeOptions = {
         treeNodeTemplate: '<span class="glyphicon glyphicon-folder-close"></span> {{ node.data.name }}'
@@ -58,6 +62,7 @@ export class NodeListComponent {
     nodeEditForm: any;
     nodeNewForm: any;
     editingNode: any;
+    itemNewForm: any;
     itemRenameForm: any;
     editingItem: any;
     updateState: string;
@@ -75,6 +80,9 @@ export class NodeListComponent {
             'name': ['', Validators.required]
         });
         this.itemRenameForm = this.formBuilder.group({
+            'name': ['', Validators.required]
+        });
+        this.itemNewForm = this.formBuilder.group({
             'name': ['', Validators.required]
         });
     }
@@ -125,6 +133,8 @@ export class NodeListComponent {
         if (this._sharedService.checkAuthority(this.type + '_CREATE')) {
             if (this.type === 'GALLERY') {
                 this.nodeAction.emit({ event: 'itemModal', node: null });
+            } else {
+                this.itemNewModal.open();
             }
         } else {
             this.noAccessModal.open();

@@ -15,6 +15,8 @@ import { NodeConst } from '../../models/node.const';
 export class NodeGalleryComponent {
     @Input() nodes: NodeConst[] = [];
     @Input() items: any[] = [];
+    @Input() mainUrl: string;
+    @Input() thumbnailUrl: string;
     @Output() nodeTableAction = new EventEmitter();
     menuOptions = [];
 

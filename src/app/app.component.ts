@@ -11,37 +11,39 @@ import { SharedService } from './common/services/shared.service';
     providers: [SharedService]
 })
 export class AppComponent {
-    isCollapsed:boolean = true;
-    jwt:string;
-    isLogged:boolean = false;
-    jwtHelper:JwtHelper = new JwtHelper();
+    isCollapsed: boolean = true;
+    jwt: string;
+    isLogged: boolean = false;
+    jwtHelper: JwtHelper = new JwtHelper();
 
-    constructor(public router:Router, private authHttp: AuthHttp, private _sharedService: SharedService) {
-      this.isLogged = false;
-      router.events.subscribe(val => {
-        if (val instanceof NavigationStart) {
-          this.jwt = localStorage.getItem('id_token');
-          if (this.jwt != null) {
-            if (!this.jwtHelper.isTokenExpired(localStorage.getItem('id_token'))) {
-              this.isLogged = true;
-            } else {
-              this.isLogged = false;
+    constructor(public router: Router, private authHttp: AuthHttp, private _sharedService: SharedService) {
+        this.isLogged = false;
+        router.events.subscribe(val => {
+            if (val instanceof NavigationStart) {
+                this.jwt = localStorage.getItem('id_token');
+                if (this.jwt != null) {
+                    if (!this.jwtHelper.isTokenExpired(localStorage.getItem('id_token'))) {
+                        this.isLogged = true;
+                    } else {
+                        this.isLogged = false;
+                    }
+                } else {
+                    this.isLogged = false;
+                }
             }
-          } else {
-            this.isLogged = false;
-          }
-        }
-        if (val instanceof NavigationEnd) {
-          if (val.url.substring(0, 6) === '/error') {
-            this.isLogged = false;
-          }
-        }
+            if (val instanceof NavigationEnd) {
+                if (val.url.substring(0, 6) === '/error') {
+                    this.isLogged = false;
+                } else if (val.url.substring(0, 13) === '/gallery-view') {
+                    this.isLogged = false;
+                }
+            }
 
-      });
+        });
     }
 
     logout() {
-      localStorage.removeItem('id_token');
-      this.router.navigate(['/login']);
+        localStorage.removeItem('id_token');
+        this.router.navigate(['/login']);
     }
 }

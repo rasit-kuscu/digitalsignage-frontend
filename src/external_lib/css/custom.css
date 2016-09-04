@@ -3,7 +3,7 @@ table tr td {
 }
 
 .simple-notification-wrapper {
-    z-index: 10 !important;
+    z-index: 1060 !important;
 }
 
 html {

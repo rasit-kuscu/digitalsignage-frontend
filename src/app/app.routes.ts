@@ -16,36 +16,36 @@ import { GroupNewComponent } from './group/components/group.new.component';
 import { GroupEditComponent } from './group/components/group.edit.component';
 import { ItemMainComponent } from './item/item.main.component';
 import { GalleryListComponent } from './gallery/components/gallery.list.component';
-import { GalleryNewComponent } from './gallery/components/gallery.new.component';
+import { GalleryViewComponent } from './gallery/components/gallery.view.component';
 import { PageError } from './errorpages/components/page.error';
 
 export const routes: RouterConfig = [
-  { path: '',       component:  LoginComponent },
-  { path: 'login',  component: LoginComponent },
-  { path: 'home',   component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'myprofile',   component: MyProfileComponent, canActivate: [AuthGuard] },
-  { path: 'user/new',   component: UserNewComponent, canActivate: [AuthGuard] },
-  { path: 'user/edit',   component: UserEditComponent, canActivate: [AuthGuard] },
-  { path: 'user/service',   component: ServiceEditComponent, canActivate: [AuthGuard] },
-  { path: 'role/new',   component: RoleNewComponent, canActivate: [AuthGuard] },
-  { path: 'role/edit',   component: RoleEditComponent, canActivate: [AuthGuard] },
-  { path: 'group/new',   component: GroupNewComponent, canActivate: [AuthGuard] },
-  { path: 'group/edit',   component: GroupEditComponent, canActivate: [AuthGuard] },
-  {
-    path: 'management',   component: ManagementMainComponent, canActivate: [AuthGuard],
-    children: [
-      { path: 'user', component: UserListComponent, canActivate: [AuthGuard] },
-      { path: 'role', component: RoleListComponent, canActivate: [AuthGuard] },
-      { path: 'group', component: GroupListComponent, canActivate: [AuthGuard] }
-    ]
-  },
-  {
-    path: 'item', component: ItemMainComponent, canActivate: [AuthGuard],
-    children: [
-      { path: 'gallery', component: GalleryListComponent, canActivate: [AuthGuard] },
-      { path: 'gallery/new', component: GalleryNewComponent, canActivate: [AuthGuard] }
-    ]
-  },
-  { path: 'error',   component: PageError},
-  { path: '**',     component: LoginComponent }
+    { path: '', component: LoginComponent },
+    { path: 'login', component: LoginComponent },
+    { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+    { path: 'myprofile', component: MyProfileComponent, canActivate: [AuthGuard] },
+    { path: 'user/new', component: UserNewComponent, canActivate: [AuthGuard] },
+    { path: 'user/edit', component: UserEditComponent, canActivate: [AuthGuard] },
+    { path: 'user/service', component: ServiceEditComponent, canActivate: [AuthGuard] },
+    { path: 'role/new', component: RoleNewComponent, canActivate: [AuthGuard] },
+    { path: 'role/edit', component: RoleEditComponent, canActivate: [AuthGuard] },
+    { path: 'group/new', component: GroupNewComponent, canActivate: [AuthGuard] },
+    { path: 'group/edit', component: GroupEditComponent, canActivate: [AuthGuard] },
+    {
+        path: 'management', component: ManagementMainComponent, canActivate: [AuthGuard],
+        children: [
+            { path: 'user', component: UserListComponent, canActivate: [AuthGuard] },
+            { path: 'role', component: RoleListComponent, canActivate: [AuthGuard] },
+            { path: 'group', component: GroupListComponent, canActivate: [AuthGuard] }
+        ]
+    },
+    { path: 'gallery-view', component: GalleryViewComponent, canActivate: [AuthGuard] },
+    {
+        path: 'item', component: ItemMainComponent, canActivate: [AuthGuard],
+        children: [
+            { path: 'gallery', component: GalleryListComponent, canActivate: [AuthGuard] }
+        ]
+    },
+    { path: 'error', component: PageError },
+    { path: '**', component: LoginComponent }
 ];
