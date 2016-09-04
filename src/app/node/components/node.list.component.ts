@@ -10,6 +10,7 @@ import { NodeService } from '../services/node.service';
 import { NodeConst } from '../models/node.const';
 import { NodeGalleryComponent } from './gallery/node.gallery.component';
 import { Item } from '../models/item';
+import { SharedService } from '../../common/services/shared.service';
 
 @Component({
     selector: 'node-list',
@@ -26,6 +27,9 @@ export class NodeListComponent {
     @Input() nodes: NodeConst[] = [];
     @Input() items: any[] = [];
     @Output() nodeAction = new EventEmitter();
+
+    @ViewChild('noAccessModal')
+    noAccessModal: ModalComponent;
 
     @ViewChild('nodeEditModal')
     nodeEditModal: ModalComponent;
@@ -61,7 +65,8 @@ export class NodeListComponent {
     constructor(private router: Router,
         private _nodeService: NodeService,
         private _notificationService: NotificationsService,
-        private formBuilder: FormBuilder) {
+        private formBuilder: FormBuilder,
+        private _sharedService: SharedService) {
 
         this.nodeEditForm = this.formBuilder.group({
             'name': ['', Validators.required]
@@ -75,10 +80,18 @@ export class NodeListComponent {
     }
 
     nodeTableAction($event) {
-        if ($event.type === 'node') {
-            this.openNodeModal($event.event, 'list', $event.item);
-        } else if ($event.type === 'item') {
-            this.openItemModal($event.event, 'list', $event.item);
+        let eventType = $event.event;
+        if (eventType === 'rename') {
+            eventType = 'update';
+        }
+        if (this._sharedService.checkAuthority(this.type + '_' + eventType.toUpperCase())) {
+            if ($event.type === 'node') {
+                this.openNodeModal($event.event, 'list', $event.item);
+            } else if ($event.type === 'item') {
+                this.openItemModal($event.event, 'list', $event.item);
+            }
+        } else {
+            this.noAccessModal.open();
         }
     }
 
@@ -89,7 +102,7 @@ export class NodeListComponent {
             this.nodeEditForm.controls['name'].updateValue(node['name']);
             this.nodeEditForm.controls['name'].setErrors(null);
             this.nodeEditModal.open();
-        } else if (type === 'new') {
+        } else if (type === 'create') {
             this.nodeNewModal.open();
         } else if (type === 'delete') {
             this.nodeDeleteModal.open();
@@ -109,8 +122,12 @@ export class NodeListComponent {
     }
 
     openItemModalClick() {
-        if (this.type === 'gallery') {
-            this.nodeAction.emit({ event: 'itemModal', node: null });
+        if (this._sharedService.checkAuthority(this.type + '_CREATE')) {
+            if (this.type === 'GALLERY') {
+                this.nodeAction.emit({ event: 'itemModal', node: null });
+            }
+        } else {
+            this.noAccessModal.open();
         }
     }
 
@@ -378,6 +395,4 @@ export class NodeListComponent {
             }
             );
     }
-}
-
 }

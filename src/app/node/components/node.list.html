@@ -12,21 +12,21 @@
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         İşlemler <span class="caret"></span>
       </button>
-      <ul class="dropdown-menu">
-        <li><a style="cursor: pointer" (click)="openNodeModal('new', 'main', currentNode)">Yeni Klasör Ekle</a></li>
-        <li role="separator" class="divider"></li>
-        <li ><a style="cursor: pointer" (click)="openNodeModal('rename', 'main', currentNode)">Adını Değiştir</a></li>
-        <li *ngIf="currentNode.parentNode != null"><a style="cursor: pointer" (click)="openNodeModal('move', 'main', currentNode)">Taşı</a></li>
-        <li *ngIf="currentNode.parentNode != null"><a style="cursor: pointer" (click)="openNodeModal('delete', 'main', currentNode)">Sil</a></li>
+      <ul class="dropdown-menu pull-right">
+        <li *ngIf="_sharedService.checkAuthority(type + '_CREATE')"><a style="cursor: pointer" (click)="openNodeModal('create', 'main', currentNode)">Yeni Klasör Ekle</a></li>
+        <li role="separator" class="divider" *ngIf="_sharedService.checkAuthority(type + '_CREATE')"></li>
+        <li *ngIf="_sharedService.checkAuthority(type + '_UPDATE')"><a style="cursor: pointer" (click)="openNodeModal('rename', 'main', currentNode)">Adını Değiştir</a></li>
+        <li *ngIf="currentNode.parentNode != null && _sharedService.checkAuthority(type + '_MOVE')"><a style="cursor: pointer" (click)="openNodeModal('move', 'main', currentNode)">Taşı</a></li>
+        <li *ngIf="currentNode.parentNode != null && _sharedService.checkAuthority(type + '_DELETE')"><a style="cursor: pointer" (click)="openNodeModal('delete', 'main', currentNode)">Sil</a></li>
       </ul>
     </div>
-    <a class="btn btn-success" style="cursor: pointer" (click)="openItemModalClick()">
-      <span *ngIf="type === 'gallery'">Yeni İçerik Ekle</span>
+    <a *ngIf="_sharedService.checkAuthority(type + '_CREATE')" class="btn btn-success" style="cursor: pointer" (click)="openItemModalClick()">
+      <span *ngIf="type === 'GALLERY'">Yeni İçerik Ekle</span>
     </a>
   </div>
 </div>
 
-<node-gallery *ngIf="type === 'gallery'" [nodes]="nodes" [items]="items" (nodeTableAction)="nodeTableAction($event)"></node-gallery>
+<node-gallery *ngIf="type === 'GALLERY'" [type]="type" [nodes]="nodes" [items]="items" (nodeTableAction)="nodeTableAction($event)"></node-gallery>
 <simple-notifications [options]="notificationOptions"></simple-notifications>
 
 <modal #nodeEditModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
@@ -145,5 +145,17 @@
   <modal-footer>
     <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="isModalProccessing" (click)="itemDeleteModal.dismiss()">İptal</button>
     <button type="button" class="btn btn-danger" [disabled]="isModalProccessing" (click)="itemDelete()">Devam Et</button>
+  </modal-footer>
+</modal>
+
+<modal #noAccessModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
+  <modal-header>
+    <h4 class="modal-title">Yetki Sınırlaması</h4>
+  </modal-header>
+  <modal-body>
+    Bu işlemi yapmak için yetkiniz yok.
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="isModalProccessing" (click)="noAccessModal.dismiss()">İptal</button>
   </modal-footer>
 </modal>

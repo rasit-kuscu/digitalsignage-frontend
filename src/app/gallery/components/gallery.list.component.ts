@@ -28,7 +28,7 @@ import { FileUploader, FILE_UPLOAD_DIRECTIVES }   from 'ng2-file-upload/ng2-file
     providers: [NodeService, NotificationsService]
 })
 export class GalleryListComponent implements OnInit {
-    type: string = "gallery";
+    type: string = "GALLERY";
     notificationOptions = { timeOut: 5000, maxStack: 1 };
     isDataAvailable: boolean = false;
     isTableAvailable: boolean = false;
@@ -57,7 +57,8 @@ export class GalleryListComponent implements OnInit {
         this.uploader = new FileUploader({
             url: _sharedService.apiUrl + 'gallery_item/upload',
             authToken: 'Bearer ' + localStorage.getItem('id_token'),
-            allowedMimeType: ['image/png', 'video/mp4', 'image/jpeg']
+            allowedMimeType: ['image/png', 'video/mp4', 'image/jpeg'],
+            removeAfterUpload: true
         });
         this.uploader.onCompleteAll = () => {
             console.log('complete');
@@ -116,13 +117,21 @@ export class GalleryListComponent implements OnInit {
         this._nodeService.load(id, 'gallery')
             .subscribe(
             (response) => {
-                this.breadcrumb = response.data.breadcrumb;
-                this.currentNode = response.data.node;
-                this.nodes = response.data.nodes;
-                this.items = this.currentNode['item'];
+                if (response.status === 'success') {
+                    this.breadcrumb = response.data.breadcrumb;
+                    this.currentNode = response.data.node;
+                    this.nodes = response.data.nodes;
+                    this.items = this.currentNode['item'];
+                    this.isDataAvailable = true;
+                } else if (response.status === 'fail') {
+                    if (response.message === 'no_access') {
+                        var jsonData = {};
+                        jsonData["error"] = "Forbidden";
+                        jsonData["exception"] = "org.springframework.security.access.AccessDeniedException";
+                        this.router.navigate(['/error', { status: 401, message: encodeURIComponent(JSON.stringify(jsonData)) }]);
+                    }
+                }
 
-                this.isTableAvailable = true;
-                this.isDataAvailable = true;
             },
             error => {
                 this.router.navigate(['/error', { status: error.status, message: encodeURIComponent(error._body) }]);

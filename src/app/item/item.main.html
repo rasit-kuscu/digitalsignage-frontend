@@ -1,9 +1,6 @@
 <div class="row">
   <div class="col-md-12">
     <div class="page-header">
-      <div class="btn-toolbar pull-right">
-        <a *ngIf="currentPage == '/management/user'" href class="btn btn-success" [routerLink]="['/user', 'new']"><b>Yeni İçerik Ekle</b></a>
-      </div>
       <h1>İçerik Yönetimi
         <small>İçerikleri yönetin</small>
       </h1>
@@ -13,7 +10,7 @@
 <div class="row">
   <div class="col-md-3">
     <div class="list-group">
-      <a [routerLink]="['/item','gallery']" [routerLinkActive]="['active']" class="list-group-item">Galeri</a>
+      <a *ngIf="_sharedService.checkAuthority('GALLERY_VIEW')" [routerLink]="['/item','gallery']" [routerLinkActive]="['active']" class="list-group-item">Galeri</a>
     </div>
   </div>
   <div class="col-md-9">

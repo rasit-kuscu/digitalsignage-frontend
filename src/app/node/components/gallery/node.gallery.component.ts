@@ -16,6 +16,7 @@ export class NodeGalleryComponent {
     @Input() nodes: NodeConst[] = [];
     @Input() items: any[] = [];
     @Output() nodeTableAction = new EventEmitter();
+    menuOptions = [];
 
     constructor(private _contextMenuService: ContextMenuService) {
     }
