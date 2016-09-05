@@ -1,2 +1,24 @@
-<a (click)="backClicked()">Geri</a>
-galeri view
+<nav class="navbar navbar-default navbar-fixed-top" (click)="$event.preventDefault()">
+    <div class="container-fluid">
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav" *ngIf="isLoaded">
+                <li style="font-weight: bold;"><a>{{item.name}}</a></li>
+                <li><a>{{humanFileSize(item.galleryItem.size)}}</a></li>
+                <li *ngIf="item.galleryItem.type === 'video'"><a>{{item.galleryItem.duration}}</a></li>
+                <li><a>{{item.updatedAt | date: 'dd/MM/yyyy HH:mm:ss'}}</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a style="cursor:pointer;" (click)="backClicked()">Geri Dön</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="row" *ngIf="isLoaded">
+    <div class="col-md-12" style="overflow: auto;">
+        <img *ngIf="item.galleryItem.type === 'image'" src="{{item.mainUrl}}{{item.galleryItem.path}}{{item.galleryItem.original}}" />
+        <video *ngIf="item.galleryItem.type === 'video'" controls>
+            <source src="{{item.mainUrl}}{{item.galleryItem.path}}{{item.galleryItem.original}}" type="video/mp4">
+              Your browser does not support HTML5 video.
+        </video>
+    </div>
+</div>

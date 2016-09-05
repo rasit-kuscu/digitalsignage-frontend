@@ -34,6 +34,7 @@ export class GalleryListComponent implements OnInit {
     notificationOptions = { timeOut: 5000, maxStack: 1 };
     isDataAvailable: boolean = false;
     isTableAvailable: boolean = false;
+    isUploadingAll: boolean = false;
     nodes: NodeConst[];
     nodeTree: NodeConst[];
     breadcrumb: any[];
@@ -60,31 +61,35 @@ export class GalleryListComponent implements OnInit {
             url: _sharedService.apiUrl + 'gallery_item/upload',
             authToken: 'Bearer ' + localStorage.getItem('id_token'),
             allowedMimeType: ['image/png', 'video/mp4', 'image/jpeg'],
-            removeAfterUpload: true
+            removeAfterUpload: true,
+            disableMultipart: true
         });
         this.uploader.onProgressAll = () => {
+            this.isUploadingAll = true;
             this._notificationService.alert('Yükleniyor', 'Dosya(lar) yükleniyor, lütfen bekleyiniz.', { timeOut: 0, clickToClose: false });
         };
         this.uploader.onCompleteAll = () => {
-            console.log('complete');
+            this.isUploadingAll = false;
         };
         this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-            let responsePath = JSON.parse(response);
-            if (responsePath instanceof Array) {
-                if (responsePath[0]['status'] === "success") {
-                    this.items.push(responsePath[0]['data']);
-                    this._notificationService.success('İşlem Başarılı', 'Dosya başarıyla yüklendi !', {});
-                } else if (responsePath[0]['status'] === "fail") {
-                    if (responsePath[0]['message'] === "file_storage_cant_connect") {
-                        this._notificationService.error('Hata', 'Dosya servisine bağlanılamıyor !', {});
-                    } else if (responsePath[0]['message'] === "file_storage_cant_upload") {
-                        this._notificationService.error('Hata', 'Dosya yüklenemedi !', {});
-                    } else {
-                        this._notificationService.error('Hata', 'Bir şeyler yanlış gitti !', {});
+            if (response !== "") {
+                let responsePath = JSON.parse(response);
+                if (responsePath instanceof Array) {
+                    if (responsePath[0]['status'] === "success") {
+                        this.items.push(responsePath[0]['data']);
+                        this._notificationService.success('İşlem Başarılı', 'Dosya başarıyla yüklendi !', {});
+                    } else if (responsePath[0]['status'] === "fail") {
+                        if (responsePath[0]['message'] === "file_storage_cant_connect") {
+                            this._notificationService.error('Hata', 'Dosya servisine bağlanılamıyor !', {});
+                        } else if (responsePath[0]['message'] === "file_storage_cant_upload") {
+                            this._notificationService.error('Hata', 'Dosya yüklenemedi !', {});
+                        } else {
+                            this._notificationService.error('Hata', 'Bir şeyler yanlış gitti !', {});
+                        }
                     }
+                } else {
+                    this.router.navigate(['/error', { status: responsePath.status, message: encodeURIComponent(response) }]);
                 }
-            } else {
-                this.router.navigate(['/error', { status: responsePath.status, message: encodeURIComponent(response) }]);
             }
         };
     }

@@ -1,94 +1,82 @@
 <loader-animation *ngIf="!isDataAvailable"></loader-animation>
 <div *ngIf="isDataAvailable">
-  <div class="row">
-    <div class="col-md-12">
-      <node-list
-        [type]="type"
-        [breadcrumb]="breadcrumb"
-        [currentNode]="currentNode"
-        [nodes]="nodes"
-        [items]="items"
-        [mainUrl]="mainUrl"
-        [thumbnailUrl]="thumbnailUrl"
-        (nodeAction)="nodeAction($event)">
-      </node-list>
-    </div>
-</div>
-
-<modal #uploadModal [backdrop]="modalDisableClose" [keyboard]="modalDisableCloseKeyboard" (onClose)="onClose()" (onDismiss)="onClose()">
-  <modal-header>
-    <h4 class="modal-title"><span *ngIf="editingNode != null">&laquo; {{editingNode.name}} &raquo;</span> Yeni Dosya Yükle</h4>
-  </modal-header>
-  <modal-body>
     <div class="row">
-      <div class="col-md-2">
-        <label class="btn btn-default btn-file" style="margin-top:15px;">
+        <div class="col-md-12">
+            <node-list [type]="type" [breadcrumb]="breadcrumb" [currentNode]="currentNode" [nodes]="nodes" [items]="items" [mainUrl]="mainUrl" [thumbnailUrl]="thumbnailUrl" (nodeAction)="nodeAction($event)">
+            </node-list>
+        </div>
+    </div>
+
+    <modal #uploadModal [backdrop]="modalDisableClose" [keyboard]="modalDisableCloseKeyboard" (onClose)="onClose()" (onDismiss)="onClose()">
+        <modal-header>
+            <h4 class="modal-title"><span *ngIf="editingNode != null">&laquo; {{editingNode.name}} &raquo;</span> Yeni Dosya Yükle</h4>
+        </modal-header>
+        <modal-body>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="btn btn-default btn-file" style="margin-top:15px;">
           Dosya Seçin <input #uploadEl type="file" ng2FileSelect [uploader]="uploader" multiple style="display: none;"  />
         </label>
-      </div>
-      <div class="col-md-10">
-        <div ng2FileDrop
-             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-             (fileOver)="fileOverBase($event)"
-             [uploader]="uploader"
-             class="well my-drop-zone">
-            Bu alana dosya sürükleyip bırakabilirsiniz.
-        </div>
-      </div>
-    </div>
-    <div id="scroll-wrapper">
-      <div class="scrollbar" id="style-1">
-        <table class="table" style="font-size:14px; margin-bottom:0;">
-          <thead>
-            <tr>
-              <th style="width:60%">Dosya Adı</th>
-              <th style="width:20%">Durum</th>
-              <th class="text-right" style="width:20%">İşlemler</th>
-            </tr>
-          </thead>
-          <tbody *ngIf="uploader.queue.length > 0">
-            <tr *ngFor="let item of uploader.queue">
-              <td><strong>{{item.file.name}}</strong></td>
-              <td>
-                <div class="progress" style="margin-bottom: 0;">
-                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
                 </div>
-              </td>
-              <td class="text-right">
-                <button type="button" class="btn btn-warning btn-xs" (click)="item.cancel()" [disabled]="!item.isUploading">
-                  <span class="glyphicon glyphicon-ban-circle"></span>
-                </button>
-                <button type="button" class="btn btn-danger btn-xs" [disabled]="item.isUploading || item.isSuccess" (click)="item.remove()">
-                  <span class="glyphicon glyphicon-trash"></span>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-          <tbody *ngIf="uploader.queue.length == 0">
-            <tr>
-              <td colspan="4" style="text-align: center;">Yüklemek için dosya seçin.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <br/><strong>Yüklenme Durumu</strong><br/>
-    <div class="progress" style="margin-bottom:0;">
-        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
-    </div>
-  </modal-body>
-  <modal-footer>
-    <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="uploader.getNotUploadedItems().length" (click)="uploadModal.dismiss()">Kapat</button>
-    <button type="button" class="btn btn-warning btn-s" (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-      <span class="glyphicon glyphicon-ban-circle"></span> Hepsini İptal Et
-    </button>
-    <button type="button" class="btn btn-danger btn-s" (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
-      <span class="glyphicon glyphicon-trash"></span> Listeyi Temizle
-    </button>
-    <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                <div class="col-md-10">
+                    <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader" class="well my-drop-zone">
+                        Bu alana dosya sürükleyip bırakabilirsiniz.
+                    </div>
+                </div>
+            </div>
+            <div id="scroll-wrapper">
+                <div class="scrollbar" id="style-1">
+                    <table class="table" style="font-size:14px; margin-bottom:0;">
+                        <thead>
+                            <tr>
+                                <th style="width:60%">Dosya Adı</th>
+                                <th style="width:20%">Durum</th>
+                                <th class="text-right" style="width:20%">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="uploader.queue.length > 0">
+                            <tr *ngFor="let item of uploader.queue">
+                                <td><strong>{{item.file.name}}</strong></td>
+                                <td>
+                                    <div class="progress" style="margin-bottom: 0;">
+                                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }">
+                                            <span *ngIf="item.progress === 100">Hazırlanıyor...</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-right">
+                                    <button type="button" class="btn btn-warning btn-xs" (click)="item.cancel()" [disabled]="!item.isUploading || item.progress === 100">
+                                      <span class="glyphicon glyphicon-ban-circle"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-xs" [disabled]="item.isUploading || item.isSuccess" (click)="item.remove()">
+                                      <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="uploader.queue.length == 0">
+                            <tr>
+                                <td colspan="4" style="text-align: center;">Yüklemek için dosya seçin.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br/><strong>Yüklenme Durumu</strong><br/>
+            <div class="progress" style="margin-bottom:0;">
+                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+            </div>
+        </modal-body>
+        <modal-footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="uploader.getNotUploadedItems().length" (click)="uploadModal.dismiss()">Kapat</button>
+            <button type="button" class="btn btn-danger btn-s" (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length || isUploadingAll">
+              <span class="glyphicon glyphicon-trash"></span> Listeyi Temizle
+            </button>
+            <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length || isUploadingAll">
       <span class="glyphicon glyphicon-upload"></span> Hepsini Yükle
     </button>
-  </modal-footer>
-</modal>
+        </modal-footer>
+    </modal>
 
-<simple-notifications [options]="notificationOptions"></simple-notifications>
+    <simple-notifications [options]="notificationOptions"></simple-notifications>
+</div>
