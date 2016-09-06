@@ -1,0 +1,20 @@
+<loader-animation *ngIf="!isDataAvailable"></loader-animation>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>Ekran Tasarımcısı
+        <small>Ekran tasarımları hazırlayın.</small>
+      </h1>
+        </div>
+    </div>
+</div>
+<div *ngIf="isDataAvailable">
+    <div class="row">
+        <div class="col-md-12">
+            <node-list [type]="type" [breadcrumb]="breadcrumb" [currentNode]="currentNode" [nodes]="nodes" [items]="items" (nodeAction)="nodeAction($event)">
+            </node-list>
+        </div>
+    </div>
+
+    <simple-notifications [options]="notificationOptions"></simple-notifications>
+</div>

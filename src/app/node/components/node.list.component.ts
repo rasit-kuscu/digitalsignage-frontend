@@ -9,6 +9,7 @@ import { TreeComponent } from 'angular2-tree-component';
 import { NodeService } from '../services/node.service';
 import { NodeConst } from '../models/node.const';
 import { NodeGalleryComponent } from './gallery/node.gallery.component';
+import { NodeDesignerComponent } from './designer/node.designer.component';
 import { Item } from '../models/item';
 import { SharedService } from '../../common/services/shared.service';
 
@@ -17,7 +18,13 @@ import { SharedService } from '../../common/services/shared.service';
     templateUrl: "./app/node/components/node.list.html",
     styleUrls: ['./app/node/components/node.css'],
     providers: [NodeService, NotificationsService],
-    directives: [NodeGalleryComponent, ROUTER_DIRECTIVES, TreeComponent, MODAL_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, SimpleNotificationsComponent],
+    directives: [NodeDesignerComponent,
+        NodeGalleryComponent,
+        ROUTER_DIRECTIVES,
+        TreeComponent,
+        MODAL_DIRECTIVES,
+        REACTIVE_FORM_DIRECTIVES,
+        SimpleNotificationsComponent],
     pipes: [TimeAgoPipe]
 })
 export class NodeListComponent {
@@ -115,7 +122,7 @@ export class NodeListComponent {
         } else if (type === 'delete') {
             this.nodeDeleteModal.open();
         } else if (type === 'move') {
-            this._nodeService.loadTree('gallery')
+            this._nodeService.loadTree(this.type.toLowerCase())
                 .subscribe(
                 (response) => {
                     this.nodeTree = response.data.nodes;
@@ -152,7 +159,7 @@ export class NodeListComponent {
         } else if (type === 'delete') {
             this.itemDeleteModal.open();
         } else if (type === 'move') {
-            this._nodeService.loadTree('gallery')
+            this._nodeService.loadTree(this.type.toLowerCase())
                 .subscribe(
                 (response) => {
                     this.nodeTree = response.data.nodes;
@@ -251,7 +258,7 @@ export class NodeListComponent {
     save() {
         this.isModalProccessing = true;
         this._notificationService.alert('Kaydediliyor', 'İşleminiz yapılıyor, lütfen bekleyiniz.', { timeOut: 0, clickToClose: false });
-        this._nodeService.save(new NodeConst(0, this.nodeNewForm.value.name, 'gallery', this.currentNode, null))
+        this._nodeService.save(new NodeConst(0, this.nodeNewForm.value.name, this.type.toLowerCase(), this.currentNode, null))
             .subscribe(
             (response) => {
                 this.isModalProccessing = false;
@@ -309,6 +316,7 @@ export class NodeListComponent {
         this._nodeService.move(new NodeConst(this.editingNode['id'], "empty", this.editingNode['type'], this.editingNode['parentNode'], null))
             .subscribe(
             (response) => {
+                console.log(response);
                 this.isModalProccessing = false;
                 if (response.status === 'success') {
                     this.nodeAction.emit({ event: 'nodeMoved', node: this.editingNode });

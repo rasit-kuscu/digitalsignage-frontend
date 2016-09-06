@@ -3,31 +3,29 @@
         <tr>
             <th style="width:70%">Ad</th>
             <th style="width:15%; text-align:right">Son Değiştirilme</th>
-            <th style="width:15%; text-align:right">Boyut</th>
+            <th style="width:15%; text-align:right">Parça</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let node of nodes" (contextmenu)="onContextMenu($event, node, 'node')">
             <td>
                 <span class="glyphicon glyphicon-folder-close"></span>&nbsp;
-                <a [routerLink]="['/item', 'gallery', {id: node.id}]"><b>{{node.name}}</b></a>
+                <a [routerLink]="['/designer', {id: node.id}]"><b>{{node.name}}</b></a>
             </td>
             <td style="text-align:right">{{node.lastUpdate | amTimeAgo}}</td>
             <td style="text-align:right">—</td>
         </tr>
         <tr *ngFor="let item of items" (contextmenu)="onContextMenu($event, item, 'item')">
             <td>
-                <span *ngIf="item.galleryItem.type === 'image'" class="glyphicon glyphicon-picture"></span>
-                <span *ngIf="item.galleryItem.type === 'video'" class="glyphicon glyphicon-film"></span> &nbsp;
                 <a [routerLink]="['/gallery-view', {id: item.id}]">{{item.name}}</a>
             </td>
             <td style="text-align:right">{{item.updatedAt | amTimeAgo}}</td>
-            <td style="text-align:right">{{humanFileSize(item.galleryItem.size, true)}}</td>
+            <td style="text-align:right">XX</td>
         </tr>
     </tbody>
     <tbody *ngIf="nodes.length === 0 && items.length === 0">
         <tr>
-            <td colspan="4" style="text-align: center;">Klasör boş, bir şeyler yükleyin.</td>
+            <td colspan="4" style="text-align: center;">Klasör boş, yeni ekran tasarımı oluşturun.</td>
         </tr>
     </tbody>
 </table>
