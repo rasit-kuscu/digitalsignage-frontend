@@ -1,6 +1,7 @@
 <html>
+
 <head>
-    <title>RU Signage</title>
+    <title>Thingsix Signage</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script src="lib/es6-shim/es6-shim.min.js"></script>
@@ -20,15 +21,17 @@
     <script src="external_lib/bootstrap/bootstrap.min.js"></script>
 
     <script src="systemjs.config.js"></script>
-    <script>System.import('app').then(null, console.error.bind(console));</script>
+    <script>
+        System.import('app').then(null, console.error.bind(console));
+    </script>
 </head>
 
 <body>
-<app>
-    <div id="loader-wrapper">
-        <div id="loader"></div>
-    </div>
-</app>
+    <app>
+        <div id="loader-wrapper">
+            <div id="loader"></div>
+        </div>
+    </app>
 </body>
 
 </html>

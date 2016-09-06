@@ -56,6 +56,8 @@ export class UserNewComponent implements OnInit {
                     this.prepareForm();
 
                     this.isDataAvailable = true;
+                } else {
+                    this.router.navigate(['/error', { status: data[0].status, message: encodeURIComponent(data[0].message) }]);
                 }
             },
             error => {
@@ -137,6 +139,8 @@ export class UserNewComponent implements OnInit {
                     } else if (response.message === 'user_builtin_name') {
                         this._notificationService.error('Hata', 'Bu kullanıcı adını kullanamazsınız.', {});
                     }
+                } else {
+                    this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                 }
             },
             error => {

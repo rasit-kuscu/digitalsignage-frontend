@@ -112,6 +112,8 @@ export class RoleEditComponent implements OnInit {
                     if (response.message === 'role_name_taken') {
                         this._notificationService.error('Hata', 'Girilen yetki adı kayıtlı.', {});
                     }
+                } else {
+                    this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                 }
             },
             error => {

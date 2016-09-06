@@ -47,6 +47,11 @@ export class NodeService {
             .map((data: Response) => <RestReponse>data.json());
     }
 
+    public itemSave(item: any): Observable<RestReponse> {
+        return this.authHttp.post(this._sharedService.apiUrl + 'item/create', JSON.stringify(item), { headers: contentHeaders })
+            .map((response: Response) => <RestReponse>response.json());
+    }
+
     public itemRename(item: any): Observable<RestReponse> {
         return this.authHttp.post(this._sharedService.apiUrl + 'item/rename', JSON.stringify(item), { headers: contentHeaders })
             .map((response: Response) => <RestReponse>response.json());

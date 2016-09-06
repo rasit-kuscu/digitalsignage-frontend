@@ -247,6 +247,8 @@ export class NodeListComponent {
                     } else {
                         this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                     }
+                } else {
+                    this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                 }
             },
             error => {
@@ -275,6 +277,8 @@ export class NodeListComponent {
                     } else {
                         this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                     }
+                } else {
+                    this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                 }
             },
             error => {
@@ -329,6 +333,36 @@ export class NodeListComponent {
                     } else {
                         this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                     }
+                } else {
+                    this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
+                }
+            },
+            error => {
+                this.router.navigate(['/error', { status: error.status, message: encodeURIComponent(error._body) }]);
+            }
+            );
+    }
+
+    itemSave() {
+        this.isModalProccessing = true;
+        this._notificationService.alert('Kaydediliyor', 'İşleminiz yapılıyor, lütfen bekleyiniz.', { timeOut: 0, clickToClose: false });
+        this._nodeService.itemRename(new Item(this.itemNewForm.value.name, this.itemNewForm.value.name, this.currentNode, null))
+            .subscribe(
+            (response) => {
+                this.isModalProccessing = false;
+                if (response.status === 'success') {
+                    this.nodeAction.emit({ event: 'itemCreated', item: response.data });
+                    this.itemNewModal.close();
+                    this._notificationService.success('İşlem Başarılı', 'Başarıyla kaydedildi.', {});
+                } else if (response.status === 'fail') {
+                    this.itemNewModal.close();
+                    if (response.message === 'item_name_taken') {
+                        this._notificationService.error('Hata', 'Seçmiş olduğunuz ad zaten kayıtlı', {});
+                    } else {
+                        this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
+                    }
+                } else {
+                    this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                 }
             },
             error => {
@@ -357,10 +391,12 @@ export class NodeListComponent {
                     } else {
                         this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                     }
+                } else {
+                    this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                 }
             },
             error => {
-                console.log(error);
+                this.router.navigate(['/error', { status: error.status, message: encodeURIComponent(error._body) }]);
             }
             );
     }
@@ -383,6 +419,8 @@ export class NodeListComponent {
                     } else {
                         this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                     }
+                } else {
+                    this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                 }
             },
             error => {

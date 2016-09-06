@@ -11,73 +11,75 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
-	selector: "service-edit",
-	templateUrl: "./app/user/components/service.edit.html",
-	directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, SimpleNotificationsComponent, ControlMessages, LoaderAnimation],
-	providers: [UserService, NotificationsService],
-	styleUrls: ['./app/user/components/user.css'],
+    selector: "service-edit",
+    templateUrl: "./app/user/components/service.edit.html",
+    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, SimpleNotificationsComponent, ControlMessages, LoaderAnimation],
+    providers: [UserService, NotificationsService],
+    styleUrls: ['./app/user/components/user.css'],
 })
 export class ServiceEditComponent implements OnInit {
-	notificationOptions = {timeOut: 5000, maxStack: 1};
-	isSaving:boolean = false;
-	isDataAvailable:boolean = false;
-  serviceUserForm:any;
-	serviceUser:ServiceUser[];
+    notificationOptions = { timeOut: 5000, maxStack: 1 };
+    isSaving: boolean = false;
+    isDataAvailable: boolean = false;
+    serviceUserForm: any;
+    serviceUser: ServiceUser[];
 
-  constructor(private _userService: UserService,
-		private formBuilder: FormBuilder,
-		private _notificationService: NotificationsService,
-		public router:Router,
-		private activatedRoute: ActivatedRoute) {
-  }
+    constructor(private _userService: UserService,
+        private formBuilder: FormBuilder,
+        private _notificationService: NotificationsService,
+        public router: Router,
+        private activatedRoute: ActivatedRoute) {
+    }
 
-	ngOnInit() {
-		this._userService.service()
-		.subscribe(
-      response => {
-				if (response.status === 'success') {
-					this.serviceUser = response.data;
+    ngOnInit() {
+        this._userService.service()
+            .subscribe(
+            response => {
+                if (response.status === 'success') {
+                    this.serviceUser = response.data;
 
-					this.serviceUserForm = this.formBuilder.group({
-						'username': [this.serviceUser['username'], Validators.required],
-						'passwords': this.formBuilder.group({
-							'password': ['', ValidationService.passwordValidatorChange],
-							're_password': ['']
-						}, {validator: ValidationService.passwordMatch})
-					});
+                    this.serviceUserForm = this.formBuilder.group({
+                        'username': [this.serviceUser['username'], Validators.required],
+                        'passwords': this.formBuilder.group({
+                            'password': ['', ValidationService.passwordValidatorChange],
+                            're_password': ['']
+                        }, { validator: ValidationService.passwordMatch })
+                    });
 
-					this.isDataAvailable = true;
-				} else {
-					this.router.navigate(['/error', {status: response.status, message: encodeURIComponent(response.message)}]);
-				}
-			},
-			error => {
-				this.router.navigate(['/error', {status: error.status, message: encodeURIComponent(error._body)}]);
-			}
-		);
-	}
+                    this.isDataAvailable = true;
+                } else {
+                    this.router.navigate(['/error', { status: response.status, message: encodeURIComponent(response.message) }]);
+                }
+            },
+            error => {
+                this.router.navigate(['/error', { status: error.status, message: encodeURIComponent(error._body) }]);
+            }
+            );
+    }
 
-	save() {
-		this._notificationService.alert('Kaydediliyor', 'İşleminiz yapılıyor, lütfen bekleyiniz.', {timeOut:0, clickToClose:false});
-		this.isSaving = true;
+    save() {
+        this._notificationService.alert('Kaydediliyor', 'İşleminiz yapılıyor, lütfen bekleyiniz.', { timeOut: 0, clickToClose: false });
+        this.isSaving = true;
 
-		this._userService.service_update(new ServiceUser(this.serviceUserForm.value.username,
-			this.serviceUserForm.value.passwords.password, null))
-		.subscribe(
-			(response) => {
-				this.isSaving = false;
-				if (response.status === 'success') {
-					this._notificationService.success('İşlem Başarılı', 'Servis kullanıcı bilgileri güncellendi.', {});
-					this.serviceUser['enabled'] = response.data['enabled'];
-				} else if (response.status === 'fail') {
-					if (response.message === 'user_username_exists') {
-						this._notificationService.error('Hata', 'Bu kullanıcı adını kullanamazsınız.', {});
-					}
-				}
-			},
-			error => {
-				this.router.navigate(['/error', {status: error.status, message: encodeURIComponent(error._body)}]);
-			}
-		);
-	}
+        this._userService.service_update(new ServiceUser(this.serviceUserForm.value.username,
+            this.serviceUserForm.value.passwords.password, null))
+            .subscribe(
+            (response) => {
+                this.isSaving = false;
+                if (response.status === 'success') {
+                    this._notificationService.success('İşlem Başarılı', 'Servis kullanıcı bilgileri güncellendi.', {});
+                    this.serviceUser['enabled'] = response.data['enabled'];
+                } else if (response.status === 'fail') {
+                    if (response.message === 'user_username_exists') {
+                        this._notificationService.error('Hata', 'Bu kullanıcı adını kullanamazsınız.', {});
+                    }
+                } else {
+                    this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
+                }
+            },
+            error => {
+                this.router.navigate(['/error', { status: error.status, message: encodeURIComponent(error._body) }]);
+            }
+            );
+    }
 }

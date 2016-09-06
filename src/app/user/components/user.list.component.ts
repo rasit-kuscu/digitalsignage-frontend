@@ -74,6 +74,8 @@ export class UserListComponent implements OnInit {
                     this.dataLoadCount++;
                     this.isTableAvailable = true;
                     this.isPaginationDisabled = false;
+                } else {
+                    this.router.navigate(['/error', { status: response.status, message: encodeURIComponent(response.message) }]);
                 }
             },
             error => {
@@ -105,7 +107,7 @@ export class UserListComponent implements OnInit {
                     this.list(this.page);
                     this._notificationService.success('İşlem Başarılı', 'Kullanıcı başarıyla silindi.', {});
                 } else {
-                    this.router.navigate(['/error', { status: response.status, message: encodeURIComponent(response.message) }]);
+                    this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                 }
             },
             error => {

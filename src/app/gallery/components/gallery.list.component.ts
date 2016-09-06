@@ -86,6 +86,8 @@ export class GalleryListComponent implements OnInit {
                         } else {
                             this._notificationService.error('Hata', 'Bir şeyler yanlış gitti !', {});
                         }
+                    } else {
+                        this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                     }
                 } else {
                     this.router.navigate(['/error', { status: responsePath.status, message: encodeURIComponent(response) }]);
@@ -153,8 +155,9 @@ export class GalleryListComponent implements OnInit {
                         jsonData["exception"] = "org.springframework.security.access.AccessDeniedException";
                         this.router.navigate(['/error', { status: 401, message: encodeURIComponent(JSON.stringify(jsonData)) }]);
                     }
+                } else {
+                    this.router.navigate(['/error', { status: response.status, message: encodeURIComponent(response.message) }]);
                 }
-
             },
             error => {
                 this.router.navigate(['/error', { status: error.status, message: encodeURIComponent(error._body) }]);

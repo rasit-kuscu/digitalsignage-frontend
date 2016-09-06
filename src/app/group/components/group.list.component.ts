@@ -72,6 +72,8 @@ export class GroupListComponent implements OnInit {
                     this.dataLoadCount++;
                     this.isTableAvailable = true;
                     this.isPaginationDisabled = false;
+                } else {
+                    this.router.navigate(['/error', { status: response.status, message: encodeURIComponent(response.message) }]);
                 }
             },
             error => {
@@ -109,7 +111,7 @@ export class GroupListComponent implements OnInit {
                         this._notificationService.error('Hata', 'En azından bir gruba sahip olmanız gerekiyor.', {});
                     }
                 } else {
-                    this.router.navigate(['/error', { status: response.status, message: encodeURIComponent(response.message) }]);
+                    this._notificationService.error('Hata', 'Bir şeyler yalnış gitti.', {});
                 }
             },
             error => {

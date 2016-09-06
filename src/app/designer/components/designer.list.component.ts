@@ -51,6 +51,8 @@ export class DesignerListComponent implements OnInit {
             this.router.navigate(['/designer', { id: $event.node['parentNode']['id'] }]);
         } else if ($event.event === 'itemMoved') {
             this.router.navigate(['/designer', { id: $event.item['parentNode']['id'] }]);
+        } else if ($event.event === 'itemCreated') {
+            this.router.navigate(['/designer', 'edit', { id: $event.item['id'] }]);
         }
     }
 
@@ -87,8 +89,9 @@ export class DesignerListComponent implements OnInit {
                         jsonData["exception"] = "org.springframework.security.access.AccessDeniedException";
                         this.router.navigate(['/error', { status: 401, message: encodeURIComponent(JSON.stringify(jsonData)) }]);
                     }
+                } else {
+                    this.router.navigate(['/error', { status: response.status, message: encodeURIComponent(response.message) }]);
                 }
-
             },
             error => {
                 this.router.navigate(['/error', { status: error.status, message: encodeURIComponent(error._body) }]);
