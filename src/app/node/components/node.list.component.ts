@@ -346,7 +346,7 @@ export class NodeListComponent {
     itemSave() {
         this.isModalProccessing = true;
         this._notificationService.alert('Kaydediliyor', 'İşleminiz yapılıyor, lütfen bekleyiniz.', { timeOut: 0, clickToClose: false });
-        this._nodeService.itemRename(new Item(this.itemNewForm.value.name, this.itemNewForm.value.name, this.currentNode, null))
+        this._nodeService.itemSave(new Item(0, this.itemNewForm.value.name, this.currentNode, null))
             .subscribe(
             (response) => {
                 this.isModalProccessing = false;

@@ -165,7 +165,7 @@
         <h4 class="modal-title">Yeni</h4>
     </modal-header>
     <modal-body>
-        <form role="form" id="itemNewForm" [formGroup]="itemNewForm" (submit)="save()">
+        <form role="form" id="itemNewForm" [formGroup]="itemNewForm" (submit)="itemSave()">
             <div class="form-group">
                 <label for="name">Adı</label>
                 <input type="text" class="form-control" id="name" formControlName="name" placeholder="Adı" autocomplete="off" autofocus>
@@ -175,7 +175,7 @@
     </modal-body>
     <modal-footer>
         <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="isModalProccessing" (click)="itemNewModal.dismiss()">İptal</button>
-        <button class="btn btn-success" form="nodeNewForm" [disabled]="!itemNewForm.valid || isModalProccessing">Kaydet</button>
+        <button class="btn btn-success" form="itemNewForm" [disabled]="!itemNewForm.valid || isModalProccessing">Kaydet</button>
     </modal-footer>
 </modal>
 

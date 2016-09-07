@@ -1,0 +1,23 @@
+.designer-area{
+  background-image: url("/external_lib/images/grid-bg.gif");
+  overflow:hidden;
+  position: relative;
+  border: 2px solid #e5e5e5;
+}
+.list-group {margin-bottom:0px}
+.sortable li span.move { margin-left: -0.5em; margin-top:0.1em;  cursor:ns-resize; }
+.sortable li span.configure { margin-left: 0.5em;  margin-top:0.1em; cursor: pointer }
+.sortable li p { margin:0; margin-left: 1.5em; }
+.layer {
+  width:100px;
+  height:100px;
+  position:absolute;
+}
+.layer p {
+  padding:3px;
+  font-weight: bold;
+  font-size: 10px;
+}
+.p-cursor {
+  cursor:pointer;
+}

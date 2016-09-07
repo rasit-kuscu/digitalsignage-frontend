@@ -18,6 +18,7 @@ import { ItemMainComponent } from './item/item.main.component';
 import { GalleryListComponent } from './gallery/components/gallery.list.component';
 import { GalleryViewComponent } from './gallery/components/gallery.view.component';
 import { DesignerListComponent } from './designer/components/designer.list.component';
+import { DesignerEditComponent } from './designer/components/designer.edit.component';
 import { PageError } from './errorpages/components/page.error';
 
 export const routes: RouterConfig = [
@@ -48,6 +49,7 @@ export const routes: RouterConfig = [
         ]
     },
     { path: 'designer', component: DesignerListComponent, canActivate: [AuthGuard] },
+    { path: 'designer/edit', component: DesignerEditComponent, canActivate: [AuthGuard] },
     { path: 'error', component: PageError },
     { path: '**', component: LoginComponent }
 ];

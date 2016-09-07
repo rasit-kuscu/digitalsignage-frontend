@@ -18,12 +18,18 @@ export class NodeDesignerComponent {
     @Output() nodeTableAction = new EventEmitter();
     menuOptions = [];
 
-    constructor(private _contextMenuService: ContextMenuService) {
+    constructor(private router: Router, private _contextMenuService: ContextMenuService) {
     }
 
     public onContextMenu($event: MouseEvent, item: any, type: any): void {
         this._contextMenuService.show.next({
             actions: [
+                {
+                    html: () => `Düzenle`,
+                    click: (item) => {
+                        this.router.navigate(['/designer', 'edit', { id: item.id }]);
+                    }
+                },
                 {
                     html: () => `Adını Değiştir`,
                     click: (item) => {

@@ -1,0 +1,114 @@
+<loader-animation *ngIf="!isDataAvailable"></loader-animation>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <div class="btn-toolbar pull-right">
+                <a href class="btn btn-warning" [routerLink]="['/designer']"><b>İptal</b></a>
+                <button class="btn btn-success" [disabled]="layers.length === 0" (click)="_save()"><b>Kaydet</b></button>
+            </div>
+            <h1>Ekran Tasarımcısı
+              <small>Ekran tasarımları hazırlayın.</small>
+            </h1>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="alert alert-info" role="alert">
+                <b>En İyi Sonuç İçin</b><br/> Ekran tasarımı yaparken tarayıcınız veya pencerenizin çözünürlüğünü değiştirmemenizi öneririz.
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-xs btn-default" (click)="_newLayer()" [disabled]="limitReached">Yeni Katman</button>
+                    </div>
+                    <h3 class="panel-title">Katmanlar</h3>
+                </div>
+                <div class="panel-body sortable-area">
+                    <span class="text-muted" *ngIf="layers.length === 0">Yeni katman ekleyin.</span>
+                    <ul class="list-group sortable">
+                        <li *ngFor="let layer of layers;" class="list-group-item" [attr.data-id]="layer.id">
+                            <div class="pull-left">
+                                <span class='glyphicon glyphicon-resize-vertical move'></span>
+                            </div>
+                            <div class="pull-left">
+                                <p>{{layer.name}}</p>
+                            </div>
+                            <div class="pull-right">
+                                <span class='glyphicon glyphicon-trash configure p-cursor' (click)="_deleteLayer(layer)">&nbsp;</span>
+                                <span class='glyphicon glyphicon-cog configure p-cursor' (click)="_updateLayer(layer)">&nbsp;</span>
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div id="designer-area" class="designer-area" (window:resize)="onResize($event)">
+                <div *ngFor="let layer of layers;" class="layer designerAreaLayer" [attr.id]="layer.id" [attr.data-id]="layer.id" [style.z-index]="layer.zindex" [style.background]="layer.color">
+                    <p>{{layer.name}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <simple-notifications [options]="notificationOptions"></simple-notifications>
+</div>
+
+<modal #updateLayerModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
+    <modal-header>
+        <h4 class="modal-title pull-left">Katman Detayları</h4>
+        <span class="badge pull-right" style="font-weight:normal; margin-top:5px;">Varsayılan: 1920x1080</span>
+    </modal-header>
+    <modal-body>
+        <form role="form" id="layerUpdateForm" [formGroup]="layerUpdateForm">
+            <div class="form-group">
+                <label for="name">Katman Adı</label>
+                <input type="text" class="form-control" id="name" formControlName="name" placeholder="Katman Adı">
+                <control-messages [control]="layerUpdateForm.controls.name"></control-messages>
+            </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="width">Genişlik</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="width" formControlName="width" placeholder="0">
+                        <div class="input-group-addon">px</div>
+                    </div>
+                    <control-messages [control]="layerUpdateForm.controls.width"></control-messages>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="width">Yükseklik</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="height" formControlName="height" placeholder="0">
+                        <div class="input-group-addon">px</div>
+                    </div>
+                    <control-messages [control]="layerUpdateForm.controls.height"></control-messages>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="width">Yukarı Mesafe</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="top" formControlName="top" placeholder="0">
+                        <div class="input-group-addon">px</div>
+                    </div>
+                    <control-messages [control]="layerUpdateForm.controls.top"></control-messages>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="width">Sol Mesafe</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="left" formControlName="left" placeholder="0">
+                        <div class="input-group-addon">px</div>
+                    </div>
+                    <control-messages [control]="layerUpdateForm.controls.left"></control-messages>
+                </div>
+            </div>
+        </form>
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="isModalProccessing" (click)="updateLayerModal.dismiss()">İptal</button>
+        <button type="button" class="btn btn-success" [disabled]="isModalProccessing" (click)="updateLayer()">Kaydet</button>
+    </modal-footer>
+</modal>
