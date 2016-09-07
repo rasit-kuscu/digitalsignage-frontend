@@ -15,8 +15,36 @@
 <div>
     <div class="row">
         <div class="col-md-3">
-            <div class="alert alert-info" role="alert">
-                <b>En İyi Sonuç İçin</b><br/> Ekran tasarımı yaparken tarayıcınız veya pencerenizin çözünürlüğünü değiştirmemenizi öneririz.
+            <div class="form-group">
+                <div class="pull-left"><label for="sel1">Ekran Çözünürlüğü</label></div>
+                <div class="pull-right"><a style="cursor: pointer; font-size:11px;" (click)="resolutionDetailModal.open('lg')">nedir?</a></div>
+                <div class="clearfix"></div>
+                <select class="form-control" #t (change)="defaultResolutionSelector(t.value)">
+                  <option value="1920x1080">1920 x 1080</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="pull-left"><label for="sel1">Ekran Sayısı</label></div>
+                <div class="pull-right"><a style="cursor: pointer; font-size:11px;" (click)="screenDetailModal.open('lg')">nedir?</a></div>
+                <div class="clearfix"></div>
+                <select class="form-control" #s (change)="defaultScreenSelector(s.value)">
+                  <option value="1x1">1 x 1 Ekran</option>
+                  <option value="1x2">1 x 2 Ekran</option>
+                  <option value="1x3">1 x 3 Ekran</option>
+                  <option value="1x4">1 x 4 Ekran</option>
+                  <option value="2x1">2 x 1 Ekran</option>
+                  <option value="2x2">2 x 2 Ekran</option>
+                  <option value="2x3">2 x 3 Ekran</option>
+                  <option value="2x4">2 x 4 Ekran</option>
+                  <option value="3x1">3 x 1 Ekran</option>
+                  <option value="3x2">3 x 2 Ekran</option>
+                  <option value="3x3">3 x 3 Ekran</option>
+                  <option value="3x4">3 x 4 Ekran</option>
+                  <option value="4x1">4 x 1 Ekran</option>
+                  <option value="4x2">4 x 2 Ekran</option>
+                  <option value="4x3">4 x 3 Ekran</option>
+                  <option value="4x4">4 x 4 Ekran</option>
+                </select>
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -36,8 +64,8 @@
                                 <p>{{layer.name}}</p>
                             </div>
                             <div class="pull-right">
-                                <span class='glyphicon glyphicon-trash configure p-cursor' (click)="_deleteLayer(layer)">&nbsp;</span>
-                                <span class='glyphicon glyphicon-cog configure p-cursor' (click)="_updateLayer(layer)">&nbsp;</span>
+                                <span class='glyphicon glyphicon-trash configure p-cursor' (click)="deleteLayerModalOpen(layer)">&nbsp;</span>
+                                <span class='glyphicon glyphicon-cog configure p-cursor' (click)="updateLayerModalOpen(layer)">&nbsp;</span>
                             </div>
                             <div class="clearfix"></div>
                         </li>
@@ -60,20 +88,20 @@
 <modal #updateLayerModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
     <modal-header>
         <h4 class="modal-title pull-left">Katman Detayları</h4>
-        <span class="badge pull-right" style="font-weight:normal; margin-top:5px;">Varsayılan: 1920x1080</span>
+        <span class="badge pull-right" style="font-weight:normal; margin-top:5px;">Varsayılan: {{defaultResolution}}</span>
     </modal-header>
     <modal-body>
         <form role="form" id="layerUpdateForm" [formGroup]="layerUpdateForm">
             <div class="form-group">
                 <label for="name">Katman Adı</label>
-                <input type="text" class="form-control" id="name" formControlName="name" placeholder="Katman Adı">
+                <input type="text" class="form-control" id="name" formControlName="name" placeholder="Katman Adı" autocomplete="off">
                 <control-messages [control]="layerUpdateForm.controls.name"></control-messages>
             </div>
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="width">Genişlik</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="width" formControlName="width" placeholder="0">
+                        <input type="text" class="form-control" id="width" formControlName="width" placeholder="0" autocomplete="off">
                         <div class="input-group-addon">px</div>
                     </div>
                     <control-messages [control]="layerUpdateForm.controls.width"></control-messages>
@@ -81,7 +109,7 @@
                 <div class="col-md-6 form-group">
                     <label for="width">Yükseklik</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="height" formControlName="height" placeholder="0">
+                        <input type="text" class="form-control" id="height" formControlName="height" placeholder="0" autocomplete="off">
                         <div class="input-group-addon">px</div>
                     </div>
                     <control-messages [control]="layerUpdateForm.controls.height"></control-messages>
@@ -91,7 +119,7 @@
                 <div class="col-md-6 form-group">
                     <label for="width">Yukarı Mesafe</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="top" formControlName="top" placeholder="0">
+                        <input type="text" class="form-control" id="top" formControlName="top" placeholder="0" autocomplete="off">
                         <div class="input-group-addon">px</div>
                     </div>
                     <control-messages [control]="layerUpdateForm.controls.top"></control-messages>
@@ -99,7 +127,7 @@
                 <div class="col-md-6 form-group">
                     <label for="width">Sol Mesafe</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="left" formControlName="left" placeholder="0">
+                        <input type="text" class="form-control" id="left" formControlName="left" placeholder="0" autocomplete="off">
                         <div class="input-group-addon">px</div>
                     </div>
                     <control-messages [control]="layerUpdateForm.controls.left"></control-messages>
@@ -110,5 +138,42 @@
     <modal-footer>
         <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="isModalProccessing" (click)="updateLayerModal.dismiss()">İptal</button>
         <button type="button" class="btn btn-success" [disabled]="isModalProccessing" (click)="updateLayer()">Kaydet</button>
+    </modal-footer>
+</modal>
+
+<modal #deleteLayerModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
+    <modal-header>
+        <h4 class="modal-title"><span *ngIf="editingLayer != null">&laquo; {{editingLayer.name}} &raquo;</span>  Sil</h4>
+    </modal-header>
+    <modal-body>
+        Bu işlemi yapmak istediğinizden emin misiniz?
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="deleteLayerModal.dismiss()">İptal</button>
+        <button type="button" class="btn btn-danger" (click)="deleteLayer()">Devam Et</button>
+    </modal-footer>
+</modal>
+
+<modal #resolutionDetailModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
+    <modal-header>
+        <h4 class="modal-title">Ekran Çözünürlüğü</h4>
+    </modal-header>
+    <modal-body>
+        Ekran çözünürlüğü hakkında görselli açıklama.
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="resolutionDetailModal.dismiss()">Tamam</button>
+    </modal-footer>
+</modal>
+
+<modal #screenDetailModal [backdrop]="modalDisableClose" (onClose)="onClose()" (onDismiss)="onClose()">
+    <modal-header>
+        <h4 class="modal-title">Ekran Sayısı</h4>
+    </modal-header>
+    <modal-body>
+        Ekran sayısı hakkında görselli açıklama.
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="screenDetailModal.dismiss()">Tamam</button>
     </modal-footer>
 </modal>

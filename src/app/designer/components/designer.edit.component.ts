@@ -31,8 +31,17 @@ declare var jQuery: any;
     providers: [NodeService, NotificationsService]
 })
 export class DesignerEditComponent implements OnInit {
+    @ViewChild('deleteLayerModal')
+    deleteLayerModal: ModalComponent;
     @ViewChild('updateLayerModal')
     updateLayerModal: ModalComponent;
+    @ViewChild('resolutionDetailModal')
+    resolutionDetailModal: ModalComponent;
+    @ViewChild('screenDetailModal')
+    screenDetailModal: ModalComponent;
+
+    defaultResolution = "1920x1080";
+    defaultScreen = "1x1";
 
     modalDisableClose: any = 'static';
     isModalProccessing: boolean = false;
@@ -41,6 +50,7 @@ export class DesignerEditComponent implements OnInit {
     elementRef: ElementRef;
     limitReached: boolean = false;
     layerUpdateForm: any;
+    editingLayer: any;
 
     layers: Layer[] = [];
     layerColors: string[] = [
@@ -132,7 +142,6 @@ export class DesignerEditComponent implements OnInit {
         var element = jQuery(this.elementRef.nativeElement);
         var designerArea = element.find('.designer-area');
         var footerHeight = 60 + 15; // 60: footer, 15: margin top
-
         var designerAreaBorderLeft = Math.round(parseFloat(designerArea.css('border-left-width')));
         var designerAreaBorderTop = Math.round(parseFloat(designerArea.css('border-top-width')));
 
@@ -143,12 +152,12 @@ export class DesignerEditComponent implements OnInit {
         designerArea.css({ height: designerAreaHeight + 'px' });
 
         for (var i = 0; i < this.layers.length; i++) {
-            let newWidth = (this.layers[i]['width'] * document.documentElement.clientWidth) / this.layers[i]['screenWidth'];
-            let newHeight = (this.layers[i]['height'] * document.documentElement.clientHeight) / this.layers[i]['screenHeight'];
+            let newWidth = (this.layers[i]['width'] * designerAreaWidth) / this.layers[i]['screenWidth'];
+            let newHeight = (this.layers[i]['height'] * designerAreaHeight) / this.layers[i]['screenHeight'];
             this.layers[i]['width'] = newWidth;
             this.layers[i]['height'] = newHeight;
-            this.layers[i]['screenWidth'] = document.documentElement.clientWidth;
-            this.layers[i]['screenHeight'] = document.documentElement.clientHeight;
+            this.layers[i]['screenWidth'] = designerAreaWidth;
+            this.layers[i]['screenHeight'] = designerAreaHeight;
             element.find('#' + this.layers[i]['id']).css({ width: newWidth + 'px', height: newHeight + 'px' });
         }
     }
@@ -157,33 +166,84 @@ export class DesignerEditComponent implements OnInit {
         this.calculateDesignerAreaSize();
     }
 
-    _updateLayer(layer: Layer) {
+    updateLayerModalOpen(layer: Layer) {
+        this.editingLayer = layer;
+
+        let defaultWidth: any = this.getDefaultResolutionDimension('width');
+        let defaultHeight: any = this.getDefaultResolutionDimension('height');
+
         this.layerUpdateForm.controls['name'].updateValue(layer['name']);
         this.layerUpdateForm.controls['name'].setErrors(null);
-        this.layerUpdateForm.controls['width'].updateValue(layer['width']);
+
+        let width: any = Math.ceil(((layer['width'] * defaultWidth) / layer['screenWidth']));
+        this.layerUpdateForm.controls['width'].updateValue(width);
         this.layerUpdateForm.controls['width'].setErrors(null);
-        this.layerUpdateForm.controls['height'].updateValue(layer['height']);
+
+        let height: any = Math.ceil(((layer['height'] * defaultHeight) / layer['screenHeight']));
+        this.layerUpdateForm.controls['height'].updateValue(height);
         this.layerUpdateForm.controls['height'].setErrors(null);
-        this.layerUpdateForm.controls['top'].updateValue(layer['top']);
+
+        let top: any = Math.ceil(((layer['top'] * defaultWidth) / layer['screenWidth']));
+        this.layerUpdateForm.controls['top'].updateValue(top);
         this.layerUpdateForm.controls['top'].setErrors(null);
-        this.layerUpdateForm.controls['left'].updateValue(layer['left']);
+
+        let left: any = Math.ceil(((layer['left'] * defaultWidth) / layer['screenWidth']));
+        this.layerUpdateForm.controls['left'].updateValue(left);
         this.layerUpdateForm.controls['left'].setErrors(null);
+
         this.updateLayerModal.open();
     }
 
-    _deleteLayer(layer: Layer) {
+    updateLayer() {
+        var element = jQuery(this.elementRef.nativeElement);
+
+        let defaultWidth: any = this.getDefaultResolutionDimension('width');
+        let defaultHeight: any = this.getDefaultResolutionDimension('height');
+
+        let width: any = (this.layerUpdateForm.value.width * this.editingLayer['screenWidth']) / defaultWidth;
+        let height: any = (this.layerUpdateForm.value.height * this.editingLayer['screenHeight']) / defaultHeight;
+        let top: any = (this.layerUpdateForm.value.top * this.editingLayer['screenWidth']) / defaultWidth;
+        let left: any = (this.layerUpdateForm.value.left * this.editingLayer['screenWidth']) / defaultWidth;
+
+        for (let layer of this.layers) {
+            if (this.editingLayer['id'] === layer['id']) {
+                layer['name'] = this.layerUpdateForm.value.name;
+                layer['width'] = width;
+                layer['height'] = height;
+                layer['top'] = top;
+                layer['left'] = left;
+                element.find('#' + layer['id']).css({ width: width + 'px', height: height + 'px', top: top + 'px', left: left + 'px' });
+            }
+        }
+
+        this.editingLayer = null;
+        this.updateLayerModal.close();
+    }
+
+    deleteLayerModalOpen(layer: Layer) {
+        this.editingLayer = layer;
+        this.deleteLayerModal.open();
+    }
+
+    deleteLayer() {
         if (this.layerColors.length >= this.layers.length) {
             this.limitReached = false;
         }
 
-        var index = this.layers.indexOf(layer);
+        let index = this.layers.map(function(x) { return x.id; }).indexOf(this.editingLayer['id']);
         this.layers.splice(index, 1);
+
+        this.editingLayer = null;
+        this.deleteLayerModal.close();
     }
 
     _newLayer() {
+        var element = jQuery(this.elementRef.nativeElement);
+        var designerArea = element.find('.designer-area');
         if (this.layerColors.length === this.layers.length) {
             this.limitReached = true;
         } else {
+            var element = jQuery(this.elementRef.nativeElement);
             let layer: Layer = new Layer();
             layer['id'] = this._generateGuid();
             layer['name'] = 'Katman ' + this.layers.length;
@@ -193,8 +253,8 @@ export class DesignerEditComponent implements OnInit {
             layer['left'] = 0;
             layer['zindex'] = this.layers.length;
             layer['color'] = this.layerColors[this.layers.length];
-            layer['screenWidth'] = document.documentElement.clientWidth;
-            layer['screenHeight'] = document.documentElement.clientHeight;
+            layer['screenWidth'] = designerArea.width();
+            layer['screenHeight'] = designerArea.height();
             this.layers.push(layer);
 
             var i = 0;
@@ -214,6 +274,27 @@ export class DesignerEditComponent implements OnInit {
     }
 
     onClose() {
+        this.editingLayer = null;
+    }
 
+    getDefaultResolutionDimension(type: string): any {
+        let size: any = this.defaultResolution.split('x');
+        let screen: any = this.defaultScreen.split('x');
+
+        if (type === 'width') {
+            return size[0] * screen[0];
+        } else if (type === 'height') {
+            return size[1] * screen[1];
+        }
+
+        return 0;
+    }
+
+    defaultResolutionSelector(value) {
+        this.defaultResolution = value;
+    }
+
+    defaultScreenSelector(value) {
+        this.defaultScreen = value;
     }
 }
